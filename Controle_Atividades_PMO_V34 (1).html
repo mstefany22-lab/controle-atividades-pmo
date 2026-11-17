@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controle Atividades PMO</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3QgeD0iNyIgeT0iMTEiIHdpZHRoPSI1MCIgaGVpZ2h0PSI0NiIgcng9IjEwIiBmaWxsPSIjMjk0YjZiIi8+PHBhdGggZD0iTTIwIDZ2MTJNNDQgNnYxMiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik03IDI1aDUwIiBzdHJva2U9IiM4YmJjZTgiIHN0cm9rZS13aWR0aD0iNCIvPjxwYXRoIGQ9Im0xOSAzOSA4IDggMTgtMTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=">
+<style>
+:root{--bg:#f2f7fc;--panel:#fff;--blue:#8bbce8;--blue2:#e4f1fc;--blue3:#c9e2f7;--navy:#294b6b;--ink:#263746;--muted:#718397;--line:#dce8f2;--soft:#f7faff;--green:#e5f3ed;--greenink:#47765f;--amber:#fff3dc;--amberink:#936c2d;--red:#fae9e8;--shadow:0 8px 26px rgba(43,83,120,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:9px 13px;background:var(--navy);color:#fff;cursor:pointer}button.secondary{background:var(--blue2);color:var(--navy)}button.ghost{background:transparent;color:var(--navy);border:1px solid var(--line)}button.danger{background:var(--red);color:#934e48}.small{font-size:12px;padding:6px 9px}
+header{background:#fff;border-bottom:1px solid var(--line);padding:17px 4vw;display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:0;z-index:5}.brand{display:flex;gap:12px;align-items:center}.logo{width:40px;height:40px;border-radius:13px;background:var(--blue2);display:grid;place-items:center;color:var(--navy);font-size:21px;flex:0 0 40px}.brand h1{font-size:18px;margin:0}.brand p{margin:0;color:var(--muted);font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}
+nav{display:flex;gap:5px;flex-wrap:wrap;padding:11px 4vw;background:#f9fcff;border-bottom:1px solid var(--line)}nav button{background:transparent;color:var(--muted);padding:8px 12px}nav button.active{background:var(--blue2);color:var(--navy);font-weight:700}
+main{max-width:1250px;margin:25px auto;padding:0 22px 55px}.view{display:none}.view.active{display:block}h2{font-size:25px;letter-spacing:-.03em;margin:0 0 4px}h3{font-size:16px;margin:0 0 12px}.sub{color:var(--muted);margin:0 0 20px}.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0}.two{grid-template-columns:1fr 1fr}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow);min-width:0}.stat-label{font-size:12px;color:var(--muted)}.stat-value{font-size:28px;font-weight:750;margin-top:4px;color:var(--navy)}.stat-note{font-size:12px;color:var(--muted)}.headrow{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:15px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.muted{color:var(--muted)}.tag{display:inline-block;padding:3px 8px;border-radius:99px;background:var(--blue2);color:var(--navy);font-size:11px}.tag.wait{background:var(--amber);color:var(--amberink)}.tag.done{background:var(--green);color:var(--greenink)}.category-tag{display:inline-block;padding:3px 9px;border-radius:99px;font-size:10px;font-weight:750;letter-spacing:.02em}.category-pmo{background:#d9eaff;color:#174f86}.category-comite{background:#f9dce8;color:#8a3f60}.category-backoffice{background:#d9f0df;color:#1e653c}.category-none{background:#edf0f3;color:#586675}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--blue)}label{display:block;color:var(--muted);font-size:12px;margin:0 0 5px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.filters input,.filters select{max-width:220px}
+.item{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--line);align-items:flex-start}.item:last-child{border-bottom:0}.item input[type=checkbox]{width:17px;height:17px;margin-top:3px;accent-color:#6fa6d8}.item-main{flex:1;min-width:0}.item-title{font-weight:650}.item.done .item-title{text-decoration:line-through;color:#8b99a5}.meta{font-size:11px;color:var(--muted);margin-top:3px}.item-actions{display:flex;gap:5px;align-items:center}.empty{padding:25px;text-align:center;background:var(--soft);border-radius:12px;color:var(--muted)}
+.type-label{display:inline-block;padding:3px 9px;margin:0 5px;border-radius:6px;background:#dcecf9;color:#294b6b;font-size:11px;font-weight:700;letter-spacing:.02em;white-space:nowrap}.calendar-group{padding-top:4px}.calendar-group+.calendar-group{border-top:1px solid var(--line);padding-top:20px}.table-wrap{width:100%;overflow-x:auto}
+.data-table{width:100%;border-collapse:collapse;min-width:720px;text-align:left}
+.data-table th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;background:var(--soft);padding:11px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.data-table td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.data-table tbody tr:hover{background:#f8fbfe}
+.data-table .activity-name{font-weight:650;color:var(--navy);cursor:pointer}
+.data-table .activity-name:hover{text-decoration:underline}
+.data-table select{min-width:145px;padding:7px 8px;font-size:12px}
+.priority-high{background:var(--amber);color:var(--amberink)}
+.priority-low{background:var(--soft);color:var(--muted)}
+.notebook{background:#fff;border:1px solid var(--line);border-left:3px solid #8bbce8;border-radius:10px;padding:13px 15px;margin:10px 0;box-shadow:0 3px 12px rgba(43,83,120,.04)}.notebook p{white-space:pre-wrap;line-height:1.55;font-size:13px;color:#46596a;margin:9px 0 2px}.notebook .note-title{font-family:inherit;font-size:15px;font-weight:700;color:var(--navy)}.notebook .meta{font-size:11px}.notebook .row{align-items:flex-start}.notebook .actions{gap:6px}.project-card{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff;margin-bottom:10px}.progress{height:7px;background:#eaf0f5;border-radius:99px;overflow:hidden;margin:9px 0}.progress span{height:100%;display:block;background:var(--blue);border-radius:99px}.project-actions{margin:12px 0 0 12px;padding-left:12px;border-left:2px solid var(--blue2)}
+.daygroup{margin:15px 0 20px}.daygroup h3{padding:10px 12px;background:var(--blue2);border-radius:10px;color:var(--navy);margin-bottom:8px}.dayline{display:grid;grid-template-columns:75px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}.daytime{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.dayblock{border-left:3px solid var(--blue);background:#f0f7fd;border-radius:8px;padding:9px 11px}.fixedblock{border-left-color:#79a994;background:#eff8f3}.timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy)}.running{background:#e6f5ed;color:#3c795d}
+dialog{border:1px solid var(--line);border-radius:17px;padding:0;width:min(600px,calc(100% - 24px));background:white;color:var(--ink);box-shadow:0 20px 70px #203c5860}dialog::backdrop{background:#1e344a80}.modalhead,.modalbody,.modalfoot{padding:17px}.modalhead{border-bottom:1px solid var(--line)}.modalhead h3{margin:0}.modalfoot{border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}header{position:static}.headrow{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){main{padding:0 13px 35px;margin-top:16px}.card{padding:13px}nav{padding:8px}nav button{font-size:12px;padding:7px 9px}.brand p{display:none}.formgrid{grid-template-columns:1fr}.wide{grid-column:auto}}
+
+.next-hours{width:82px;min-width:72px;padding:7px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);font:inherit}
+#nextList .data-table td{vertical-align:middle}
+#nextList .activity-name{cursor:pointer}
+#nextList .activity-name:hover{text-decoration:underline}
+
+.project-expand{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.project-expand summary{cursor:pointer;color:var(--navy);font-size:12px;font-weight:650;list-style:none}
+.project-expand summary::-webkit-details-marker{display:none}
+.project-expand summary:before{content:'＋';display:inline-block;margin-right:7px;font-weight:800}
+.project-expand[open] summary:before{content:'−'}
+.project-expand .project-actions{padding-top:8px}
+.hours-row{margin:13px 0}
+.hours-row .row{font-size:12px;margin-bottom:5px}
+.hours-track{height:10px;border-radius:99px;background:var(--blue2);overflow:hidden}
+.hours-track span{display:block;height:100%;border-radius:99px;background:#6fa6d8}
+
+#meetings .headrow{margin-bottom:12px}
+#meetings .filters{padding:12px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);margin-bottom:14px}
+#meetings .filters input,#meetings .filters select{font-size:13px;padding:8px 10px}
+#meetings #meetingList{display:grid;gap:2px}
+@media(max-width:650px){.notebook .row{flex-direction:column}.notebook .actions{width:100%}}
+
+/* Meu dia em Kanban */
+.day-calendar-card{margin-bottom:22px}.day-calendar-list{display:grid;gap:8px;margin-top:12px}.calendar-day-entry{display:grid;grid-template-columns:105px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:11px;background:#f8fbfe}.calendar-day-time{font-weight:750;color:var(--navy);font-variant-numeric:tabular-nums}.calendar-day-title{font-weight:700;color:var(--ink)}.calendar-day-meta{font-size:11px;color:var(--muted);margin-top:3px}.day-kanban-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:18px 0 12px}.day-kanban-head h3{margin:0}.day-kanban-head .sub{margin:3px 0 0}.day-kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;align-items:start}.kanban-column{background:#eaf1f7;border:1px solid var(--line);border-radius:14px;padding:11px;min-height:230px}.kanban-column.drag-over{outline:2px dashed var(--blue);background:#e3f0fb}.kanban-column-head{display:flex;justify-content:space-between;align-items:center;padding:3px 3px 10px;font-weight:750;color:var(--navy)}.kanban-stack{display:grid;gap:9px;min-height:175px}.kanban-card{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;box-shadow:0 3px 10px rgba(43,83,120,.05);cursor:grab;transition:filter .15s ease}.kanban-card.category-bg-pmo{background:#dcecff;border-color:#9fc5eb}.kanban-card.category-bg-comite{background:#fbe3ec;border-color:#e7b6ca}.kanban-card.category-bg-backoffice{background:#dff3e7;border-color:#a8d8b9}.kanban-card.category-bg-none{background:#edf0f3;border-color:#cbd2d9}.kanban-card .kanban-card-title{color:#18334d}.kanban-card .kanban-card-meta{color:#40566b}.kanban-card .kanban-card-actions button{background:rgba(255,255,255,.72);border-color:rgba(40,65,90,.18);color:#294b6b}.kanban-card:active{filter:brightness(.98)}.kanban-card:active{cursor:grabbing}.kanban-card-title{font-weight:700;color:var(--navy);overflow-wrap:anywhere}.kanban-card-meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}.kanban-card-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:10px}.kanban-card-actions button{font-size:11px;padding:6px 8px}.kanban-empty{padding:18px 8px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed #c8d6e3;border-radius:9px}.kanban-count{background:#fff;border-radius:99px;padding:2px 8px;font-size:11px;color:var(--muted)}
+@media(max-width:760px){.day-kanban{grid-template-columns:1fr}.kanban-column{min-height:140px}.kanban-stack{min-height:65px}.calendar-day-entry{grid-template-columns:78px minmax(0,1fr)}.calendar-day-entry .item-actions{grid-column:2}.day-kanban-head{align-items:flex-start;flex-direction:column}}
+</style>
+
+<style>
+/* Padrão visual unificado das tabelas */
+.data-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+.data-table th{background:#edf3f8;color:#29445d;font-weight:700;text-align:left;padding:11px 12px;white-space:nowrap;border-bottom:1px solid var(--line)}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;color:var(--text)}
+.data-table tbody tr:last-child td{border-bottom:0}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.data-table .activity-name{cursor:pointer;font-weight:650;color:var(--navy)}
+.data-table .activity-name:hover{text-decoration:underline}
+.data-table .row-completed td{opacity:.68}
+.data-table .row-completed td:nth-child(2){text-decoration:line-through}
+.data-table .free-row td{color:var(--muted);background:#fafbfd;font-style:italic}
+.data-table .row-due td{background:#fffaf0}
+.data-table .notes-cell{min-width:220px;max-width:420px;white-space:pre-wrap;line-height:1.45}
+.project-progress{min-width:90px;margin:0 0 4px}
+.table-check{display:inline-flex;align-items:center;gap:5px;margin:0;white-space:nowrap;font-size:12px}
+@media(max-width:760px){.data-table{min-width:760px}.table-wrap{overflow-x:auto}}
+</style>
+
+<style>
+/* Ajustes de expansão das atividades nos projetos */
+.project-table-section{background:#fff;border:1px solid var(--line);border-radius:10px;margin:0 0 16px;overflow:hidden}
+.project-table-section .table-wrap{border:0;border-radius:0}
+.project-main-table tbody tr:hover{background:#fff}
+.project-expand{border-top:1px solid var(--line);background:#f8fafc}
+.project-expand summary{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;list-style:none;color:var(--navy);font-size:13px;font-weight:650}
+.project-expand summary::-webkit-details-marker{display:none}
+.project-expand summary:before{content:'＋';display:inline-grid;place-items:center;width:20px;height:20px;border-radius:5px;background:#e8f0f7;color:#315575;font-weight:700}
+.project-expand[open] summary:before{content:'−'}
+.project-expand summary .expand-hint{margin-left:auto;color:var(--muted);font-size:11px;font-weight:400}
+.project-expand-content{padding:0 12px 12px}
+.project-task-table{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.project-task-table th{background:#f0f4f8}
+.project-task-table td{font-size:12px}
+</style>
+
+<style>
+/* Projetos V12: cards neutros e categorias identificadas apenas pelo rótulo */
+.project-grid-v10{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.project-card-v10{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:var(--shadow);min-width:0}
+.project-card-v10.project-cat-pmo{background:#fff;border-color:var(--line)}
+.project-card-v10.project-cat-comite{background:#fff;border-color:var(--line)}
+.project-card-v10.project-cat-backoffice{background:#fff;border-color:var(--line)}
+.project-card-v10.project-cat-none{background:#fff;border-color:var(--line)}
+.project-card-v10 .project-card-meta{border-color:#ffffff80}
+.project-card-v10 .project-expand-v10{border-color:#ffffff90}
+.project-period{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;padding:10px 12px;background:#ffffff85;border-radius:9px;font-size:11px;color:var(--muted)}
+.project-period strong{display:block;color:var(--navy);font-size:10px;text-transform:uppercase;letter-spacing:.035em;margin-bottom:2px}
+.project-period span{font-weight:650;color:var(--ink)}
+.project-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.project-card-heading{min-width:0}.project-card-title{font-size:16px;font-weight:750;color:var(--navy);line-height:1.3;overflow-wrap:anywhere}
+.project-card-outcome{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}
+.project-status-tag{white-space:nowrap}.status-done{background:var(--green);color:var(--greenink)}.status-paused{background:#edf0f3;color:#586675}.status-attention{background:var(--amber);color:var(--amberink)}
+.project-card-meta{display:flex;gap:8px 16px;flex-wrap:wrap;margin-top:14px;padding:10px 0;border-top:1px solid #edf1f5;border-bottom:1px solid #edf1f5;font-size:11px;color:var(--muted)}
+.project-card-meta b{color:#536b80;margin-right:4px}
+.project-progress-line{margin-top:12px}.project-progress-label{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}.project-progress-label strong{color:var(--navy)}
+.project-progress-line .progress{margin:7px 0 0;height:8px}
+.project-card-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.project-card-actions .danger-text{color:#934e48}
+.project-expand-v10{margin-top:13px;border-top:1px solid #edf1f5;padding-top:10px}.project-expand-v10 summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;font-size:12px;font-weight:700;color:var(--navy)}.project-expand-v10 summary::-webkit-details-marker{display:none}.project-expand-v10 summary:before{content:'＋';display:inline-grid;place-items:center;width:19px;height:19px;border-radius:5px;background:var(--blue2)}.project-expand-v10[open] summary:before{content:'−'}
+.project-task-list{margin-top:8px;border-top:1px solid #edf1f5}.project-task-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #edf1f5}.project-task-row:last-child{border-bottom:0}.project-task-info{min-width:0;display:grid;gap:2px}.project-task-info strong{font-size:12px;color:var(--ink);overflow-wrap:anywhere}.project-task-info span{font-size:10px;color:var(--muted)}.project-task-row.is-done .project-task-info strong{text-decoration:line-through;color:#8996a2}.project-no-tasks{font-size:12px;color:var(--muted);padding:12px 0}
+@media(max-width:850px){.project-grid-v10{grid-template-columns:1fr}}
+</style>
+
+
+<style>
+/* V13: Comitê de Produto sempre amarelo; cor somente no rótulo */
+.category-tag.category-comite, .project-card-v10 .category-tag.category-comite, .kanban-card .category-tag.category-comite {
+  background-color:#ffe58a !important;
+  color:#674900 !important;
+  border:1px solid #e9c95b !important;
+}
+.project-card-v10 { background:#fff !important; }
+</style>
+
+
+<style id="v15-visual-adjustments">
+/* Comitê de Produto: amarelo consistente no cartão inteiro do Kanban */
+.kanban-card.category-bg-comite,
+.kanban-card.category-bg-comite:active {
+  background:#fff3bf !important;
+  border-color:#e5c85f !important;
+}
+.kanban-card.category-bg-comite .kanban-card-title,
+.kanban-card.category-bg-comite .kanban-card-meta { color:#594719 !important; }
+.kanban-card.category-bg-comite .kanban-card-actions button { color:#594719 !important; }
+/* Prioridade como indicador visual compacto */
+.priority-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;width:25px;height:25px;border-radius:50%;font-size:12px;background:rgba(255,255,255,.72);border:1px solid rgba(50,70,90,.12);line-height:1}
+.priority-icon.priority-high{background:#fff0ed}.priority-icon.priority-normal{background:#fff8d9}.priority-icon.priority-low{background:#eaf3ff}
+/* Projetos: reduzir altura e densidade dos cards */
+.project-grid-v10{gap:10px}
+.project-card-v10{padding:11px 12px;border-radius:12px;box-shadow:0 2px 7px rgba(43,83,120,.045)}
+.project-card-top{gap:7px;align-items:center}
+.project-card-title{font-size:14px;line-height:1.25}
+.project-status-tag{font-size:10px;padding:2px 7px}
+.project-card-meta{margin-top:7px;padding:5px 0;gap:6px 10px;font-size:10px}
+.project-period{display:flex;gap:7px 13px;flex-wrap:wrap;margin-top:7px;padding:6px 8px;background:#f7f9fb;border-radius:7px;font-size:10px}
+.project-period>div{min-width:0}
+.project-period strong{font-size:9px;margin-bottom:1px}
+.project-period span{font-size:10px}
+.project-progress-line{margin-top:7px}
+.project-progress-label{font-size:10px}
+.project-progress-line .progress{margin:4px 0 0;height:5px}
+.project-card-actions{gap:4px;margin-top:8px}
+.project-card-actions button{font-size:10px;padding:5px 7px;min-height:27px}
+.project-expand-v10{margin-top:7px;padding-top:6px}
+.project-expand-v10 summary{font-size:10px;gap:6px}
+.project-expand-v10 summary:before{width:16px;height:16px;font-size:10px}
+.project-task-list{margin-top:5px}
+.project-task-row{padding:6px 0;gap:7px}
+.project-task-info strong{font-size:11px}
+.project-task-info span{font-size:9px}
+.project-no-tasks{font-size:10px;padding:8px 0}
+@media(max-width:850px){.project-grid-v10{grid-template-columns:1fr}}
+</style>
+
+
+<style>
+/* V16: Comitê de Produto em amarelo; prioridade volta ao texto */
+.kanban-card.category-bg-comite{background:#fff3bf !important;border-color:#e6c85d !important}
+.kanban-card.category-bg-comite .kanban-card-title,.kanban-card.category-bg-comite .kanban-card-meta{color:#594719 !important}
+.priority-text{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.priority-text.priority-high{background:#fde3df;color:#9b3329}
+.priority-text.priority-normal{background:#fff1c2;color:#795b12}
+.priority-text.priority-low{background:#e2efff;color:#315f91}
+</style>
+
+
+<style>
+/* V17: prioridade sem cor de fundo */
+.priority-text,.priority-text.priority-high,.priority-text.priority-normal,.priority-text.priority-low{background:transparent!important;color:inherit!important;border:0!important;box-shadow:none!important;padding:0!important;border-radius:0!important}
+</style>
+
+<style>
+/* V18: Comitê de Produto em rosa claro, substituindo regras antigas */
+.category-tag.category-comite{background:#f8dce7 !important;color:#873f5d !important;border:1px solid #e9b8ca !important}
+.kanban-card.category-bg-comite{background:#fbe5ed !important;border-color:#e8b7ca !important}
+</style>
+
+
+<style id="kanban-status-colors-v24">
+/* Cores dos cartões passam a representar o fluxo, não a categoria */
+html body .kanban-card.kanban-status-next{background:#edf0f3 !important;border-color:#cbd2d9 !important}
+html body .kanban-card.kanban-status-day{background:#dcecff !important;border-color:#9fc5eb !important}
+html body .kanban-card.kanban-status-done{background:#dff3e7 !important;border-color:#a8d8b9 !important}
+html body .kanban-card.kanban-status-next .kanban-card-title,
+html body .kanban-card.kanban-status-next .kanban-card-meta{color:#465563 !important}
+html body .kanban-card.kanban-status-day .kanban-card-title,
+html body .kanban-card.kanban-status-day .kanban-card-meta{color:#244e76 !important}
+html body .kanban-card.kanban-status-done .kanban-card-title,
+html body .kanban-card.kanban-status-done .kanban-card-meta{color:#285b3d !important}
+</style>
+
+<style id="v25-neutral-category-tags">
+/* Categoria identificada apenas por texto, sem cor de fundo */
+html body .category-tag,
+html body .category-tag.category-pmo,
+html body .category-tag.category-comite,
+html body .category-tag.category-backoffice,
+html body .category-tag.category-none,
+html body .project-card-v10 .category-tag,
+html body .kanban-card .category-tag {
+  background: transparent !important;
+  color: inherit !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+</style>
+
+<style id="v26-all-category-tags-neutral">
+/* Todas as categorias, inclusive Comitê de Produto, são exibidas apenas como texto. */
+html body span.category-tag,
+html body span.category-tag.category-pmo,
+html body span.category-tag.category-comite,
+html body span.category-tag.category-backoffice,
+html body span.category-tag.category-none,
+html body .project-card-v10 span.category-tag,
+html body .kanban-card span.category-tag {
+  background: none !important; background-color: transparent !important; background-image: none !important;
+  color: inherit !important; border: 0 !important; outline: 0 !important; box-shadow: none !important;
+  padding: 0 !important;
+}
+</style>
+
+<style id="v27-kanban-neutral-cards-stage-tags">
+/* Todos os cartões ficam neutros; a cor identifica somente a etapa no cabeçalho. */
+html body .kanban-card,
+html body .kanban-card.category-bg-pmo,
+html body .kanban-card.category-bg-comite,
+html body .kanban-card.category-bg-backoffice,
+html body .kanban-card.category-bg-none,
+html body .kanban-card.kanban-status-next,
+html body .kanban-card.kanban-status-day,
+html body .kanban-card.kanban-status-done {
+  background:#edf0f3 !important; border:1px solid #cbd2d9 !important;
+}
+html body .kanban-card .kanban-card-title,
+html body .kanban-card .kanban-card-meta { color:#465563 !important; }
+html body .kanban-card .kanban-card-actions button { background:#fff !important; border-color:#d5dce3 !important; color:#34495e !important; }
+.kanban-stage-tag{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;font-size:13px;font-weight:750;line-height:1.2}
+.kanban-stage-next{background:#dfe4e9;color:#45515d}
+.kanban-stage-day{background:#dcecff;color:#245783}
+.kanban-stage-done{background:#dff1e5;color:#286044}
+</style>
+
+
+<style>
+/* Cartões do Kanban com o mesmo fundo neutro dos compromissos do Meu dia */
+html body .kanban-card,
+html body .kanban-card.category-bg-pmo,
+html body .kanban-card.category-bg-comite,
+html body .kanban-card.category-bg-backoffice,
+html body .kanban-card.category-bg-none,
+html body .kanban-card.kanban-status-next,
+html body .kanban-card.kanban-status-day,
+html body .kanban-card.kanban-status-done {
+  background:#f8fbfe !important;
+  border-color:var(--line) !important;
+}
+html body .kanban-card .kanban-card-title,
+html body .kanban-card .kanban-card-meta { color:var(--ink) !important; }
+</style>
+
+
+<style id="v29-force-neutral-category-labels">
+/* Sobrescreve qualquer estilo legado de categoria, inclusive regras por categoria e estilos herdados. */
+html body span.category-tag,
+html body span.category-tag.category-pmo,
+html body span.category-tag.category-comite,
+html body span.category-tag.category-backoffice,
+html body span.category-tag.category-none,
+html body .kanban-card span.category-tag,
+html body .project-card-v10 span.category-tag,
+html body .item span.category-tag {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #465563 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+</style>
+
+<style id="v33-category-label-neutral-final">
+html body span.category-label-neutral {
+ display:inline !important;background:transparent !important;background-color:transparent !important;
+ background-image:none !important;color:#465563 !important;border:0 !important;outline:0 !important;
+ box-shadow:none !important;padding:0 !important;margin:0 !important;font-weight:500 !important;font-size:10px !important;line-height:1.2 !important;
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo" aria-label="PMO Atividades"><svg viewBox="0 0 64 64" width="27" height="27" role="img" aria-hidden="true"><rect x="7" y="11" width="50" height="46" rx="10" fill="#294b6b"/><path d="M20 6v12M44 6v12" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M7 25h50" stroke="#8bbce8" stroke-width="4"/><path d="m19 39 8 8 18-18" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Controle Atividades PMO</h1></div></div>
+ <div class="actions"><button class="ghost small" onclick="refreshApp()" title="Recarregar o aplicativo sem apagar as atividades">↻ Atualizar</button><button class="ghost small" onclick="exportBackup()">Exportar backup</button><button class="ghost small" onclick="document.getElementById('importer').click()">Importar</button><input id="importer" type="file" accept="application/json" hidden onchange="importBackup(event)"></div>
+</header>
+<nav id="nav">
+ <button class="active" data-view="day">Meu dia</button><button data-view="calendar">Calendário</button><button data-view="projects">Projetos</button><button data-view="next">Próximas ações</button><button data-view="waiting">Aguardando</button><button data-view="review">Revisão</button><button data-view="meetings">Brain Dump</button>
+</nav>
+<main>
+<section class="view active" id="day">
+ <div class="headrow"><div><h2>Meu dia</h2><p class="sub">Compromissos do Calendário por horário e ações organizadas em Kanban.</p></div><div class="actions"><input type="date" id="dayDate" style="width:auto" onchange="renderDay()"><button onclick="openTask()">＋ Nova ação</button></div></div>
+ <div class="grid stats" style="margin-top:0"><div class="card"><div class="stat-label">Horas planejadas</div><div class="stat-value" id="plannedTotal">0h</div></div><div class="card"><div class="stat-label">Horas realizadas</div><div class="stat-value" id="actualTotal">0h</div></div><div class="card"><div class="stat-label">Ações concluídas</div><div class="stat-value" id="completedTotal">0</div></div><div class="card"><div class="stat-label">Compromissos no calendário</div><div class="stat-value" id="fixedTotal">0</div></div></div>
+ <div class="card day-calendar-card"><div class="row"><div><h3 id="dayHeading">Compromissos do Calendário</h3><div class="meta">Atividades fixas e pontuais cadastradas na aba Calendário</div></div><span class="tag">Por horário</span></div><div id="dayCalendarList"></div></div>
+ <div class="card" id="dayWaitingCard" style="margin-top:-8px;margin-bottom:22px"><div class="row"><div><h3>Retornos esperados para hoje</h3><div class="meta">Atividades em Aguardando com data esperada de resposta igual à data selecionada</div></div><span class="tag" id="dayWaitingCount">0 retornos</span></div><div id="dayWaitingList"></div></div>
+ <div class="day-kanban-head"><div><h3>Ações do dia</h3><p class="sub">Organize suas ações não agendadas. Arraste os cartões entre as etapas ou use os controles.</p></div><button class="secondary small" onclick="openTask()">＋ Adicionar ação</button></div>
+ <div id="dayKanban" class="day-kanban"></div>
+</section>
+<section class="view" id="calendar">
+ <div class="headrow"><div><h2>Calendário</h2><p class="sub">Visualize e gerencie suas atividades em listas organizadas.</p></div><div class="actions"><button class="secondary" onclick="openOneOff()">＋ Atividade pontual</button><button class="secondary" onclick="openReminder()">＋ Lembrete</button><button onclick="openFixed()">＋ Atividade fixa</button></div></div>
+ <div class="card"><div id="fixedList"></div></div>
+</section>
+<section class="view" id="next">
+ <div class="headrow"><div><h2>Próximas ações</h2><p class="sub">Ações físicas, específicas e disponíveis para executar agora.</p></div><button onclick="openTask()">＋ Nova ação</button></div>
+ <div class="filters"><input id="nextSearch" placeholder="Buscar ação..." oninput="renderNext()"><select id="nextProject" onchange="renderNext()"><option value="">Todos os projetos</option></select></div>
+ <div class="card"><div id="nextList"></div></div>
+</section>
+<section class="view" id="meetings">
+ <div class="headrow"><div><h2>Brain Dump</h2><p class="sub">Capture atividades que surgirem ao longo do dia. Depois, abra cada item para completar as informações e definir seu status.</p></div><div class="actions"><button onclick="openProcessingTask()">＋ Capturar atividade</button></div></div>
+ <div class="filters"><input id="processingSearch" placeholder="Buscar atividade..." oninput="renderMeetings()"><select id="processingStatus" onchange="renderMeetings()"><option value="">Todos os status</option><option value="processing">Em processamento</option><option value="next">Próximas ações</option><option value="day">Meu Dia</option><option value="waiting">Aguardando</option><option value="done">Concluída</option></select></div>
+ <div class="card"><div id="meetingList"></div></div>
+</section>
+<section class="view" id="review">
+ <div class="headrow"><div><h2>Revisão</h2><p class="sub">Confira o que foi executado na semana e compare horas planejadas e realizadas.</p></div><input type="date" id="reviewDate" style="width:auto" onchange="renderReview()"></div>
+ <div class="grid stats" style="margin-top:0"><div class="card"><div class="stat-label">Atividades executadas</div><div class="stat-value" id="weekCount">0</div></div><div class="card"><div class="stat-label">Horas planejadas</div><div class="stat-value" id="weekPlanned">0h</div></div><div class="card"><div class="stat-label">Horas realizadas</div><div class="stat-value" id="weekActual">0h</div></div><div class="card"><div class="stat-label">Média de horas por atividade</div><div class="stat-value" id="weekDelta">0h</div></div></div>
+ <div class="card"><div class="row"><h3 id="weekHeading">Atividades executadas</h3><span class="tag">Segunda a domingo</span></div><div id="reviewList"></div></div>
+</section>
+<section class="view" id="projects">
+ <div class="headrow"><div><h2>Projetos</h2><p class="sub">No GTD, projeto é todo resultado que exige mais de uma ação para ser concluído. Organize cada resultado e suas próximas ações.</p></div><button onclick="openProject()">＋ Novo projeto</button></div>
+ <div class="filters"><input id="projectSearch" placeholder="Buscar projeto..." oninput="renderProjects()"><select id="projectStatusFilter" onchange="renderProjects()"><option value="">Todos os status</option><option value="active">Em andamento</option><option value="done">Concluídos</option><option value="attention">Em atenção</option><option value="paused">Pausados</option></select><select id="projectCategoryFilter" onchange="renderProjects()"><option value="">Todas as categorias</option></select></div><div id="projectList"></div>
+</section>
+<section class="view" id="waiting">
+ <div class="headrow"><div><h2>Aguardando</h2><p class="sub">Atividades agrupadas por pessoa de quem você espera retorno.</p></div></div>
+ <div id="waitingList"></div>
+</section>
+</main>
+<dialog id="modal"><form id="form"><div class="modalhead"><h3 id="modalTitle">Adicionar</h3></div><div class="modalbody" id="modalBody"></div><div class="modalfoot"><button type="button" class="danger" id="modalDeleteBtn" style="display:none;margin-right:auto">Excluir</button><button type="button" class="ghost" onclick="closeModal()">Cancelar</button><button type="submit">Salvar</button></div></form></dialog>
+<script>
+const empty={tasks:[],projects:[],fixed:[],oneOff:[],meetings:[],agendaEntries:[]};let db=loadDB(),editId=null,editKind=null;
+db.tasks.forEach(t=>{if(t.status==='backlog')t.status='next'});
+function loadDB(){try{return {...empty,...JSON.parse(localStorage.getItem('workGTD')||'{}')}}catch(e){return structuredClone(empty)}}
+function save(){localStorage.setItem('workGTD',JSON.stringify(db));renderAll()}
+function refreshApp(){
+ try{
+  const saved=localStorage.getItem('workGTD');
+  if(saved){
+   const parsed=JSON.parse(saved);
+   db={...empty,...parsed};
+  }
+  renderAll();
+ }catch(e){
+  console.error("Não foi possível atualizar os dados:",e);
+ }
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function today(){return new Date().toISOString().slice(0,10)}
+function fmt(d){return d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR'):'Sem data'}
+function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===v));}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+function projectName(id){return db.projects.find(p=>p.id===Number(id))?.name||''}
+function statusLabel(s){return ({processing:'Processamento',day:'Meu Dia',next:'Próximas ações',waiting:'Aguardando',backlog:'Backlog',done:'Concluída'})[s]||s}
+function categoryTag(category){const c=category||'';return `<span class=\"category-label-neutral\">${esc(c||'Sem categoria')}</span>`}
+function taskCard(t,opts={}){
+ const dates=(t.startDate||t.endDate||t.date)?`${fmt(t.startDate||t.endDate||t.date)}${t.endDate&&t.endDate!==(t.startDate||t.date)?' a '+fmt(t.endDate):''}`:'Sem período definido';
+ const times=(t.startTime||t.endTime||t.time)?`${t.startTime||t.time||'--:--'}${t.endTime?'–'+t.endTime:''}`:'';
+ return `<div class="item ${t.status==='done'?'done':''}"><input type="checkbox" ${(t.completed||t.status==='done')?'checked':''} onchange="completeTask(${t.id},this.checked)" aria-label="Concluir"><div class="item-main"><div class="item-title" style="cursor:pointer" title="Abrir atividade" onclick="editTask(${t.id})">${esc(t.title)}</div><div class="meta">${t.project?`${esc(projectName(t.project))} · `:''}${dates}${times?' · '+esc(times):''}${t.status==='waiting'&&t.waitingFor?' · Aguardando: '+esc(t.waitingFor):''}${t.status==='waiting'&&t.expectedResponseDate?' · Resposta até: '+fmt(t.expectedResponseDate):''}</div><div class="meta">Horas planejadas: ${Number(t.plannedHours||0).toLocaleString('pt-BR')}h · Realizadas: ${Number(t.actualHours||0).toLocaleString('pt-BR')}h</div>${t.notes?`<div class="meta">${esc(t.notes)}</div>`:''}</div><div class="item-actions"><span class="tag ${t.status==='waiting'?'wait':t.status==='done'?'done':''}">${statusLabel(t.status)}</span><button class="ghost small" onclick="editTask(${t.id})">✎</button></div></div>`
+}
+function renderAll(){renderDay();renderNext();renderProjects();renderMeetings();renderReview();renderWaiting();renderFixed();renderCalendarOccurrences()}
+function renderHome(){let active=db.tasks.filter(t=>t.status==='next'),todayTasks=active.filter(t=>t.date===today()),projects=db.projects.filter(p=>p.status!=='done');document.getElementById('sToday').textContent=todayTasks.length;document.getElementById('sNext').textContent=active.length;document.getElementById('sProjects').textContent=projects.length;document.getElementById('sWaiting').textContent=db.tasks.filter(t=>t.status==='waiting').length;document.getElementById('homeToday').innerHTML=todayTasks.length?todayTasks.map(taskCard).join(''):'<div class="empty">Nenhuma ação planejada para hoje. Escolha suas prioridades em Próximas ações.</div>';document.getElementById('homeProjects').innerHTML=projects.length?projects.slice(0,5).map(p=>{let ts=db.tasks.filter(t=>t.project===p.id),done=ts.filter(t=>t.completed||t.status==='done').length;return `<div style="margin:12px 0"><div class="row"><strong>${esc(p.name)}</strong><span class="muted">${done}/${ts.length}</span></div><div class="progress"><span style="width:${ts.length?done/ts.length*100:0}%"></span></div></div>`}).join(''):'<div class="empty">Nenhum projeto cadastrado.</div>'}
+function fixedForDate(d){
+ let weekday=String(new Date(d+'T12:00:00').getDay());
+ return db.fixed.filter(f=>f.days?.includes(weekday)).map(f=>{const ov=f.dateOverrides?.[d]||{};return {...f,...(ov.time?{time:ov.time}:{}),...(ov.end?{end:ov.end}:{}),kind:'fixed',completed:(f.completedDates||[]).includes(d)}});
+}
+function toggleFixed(id,date,checked){
+ let f=db.fixed.find(x=>x.id===id);if(!f)return;
+ f.completedDates=f.completedDates||[];
+ f.completedDates=checked?[...new Set([...f.completedDates,date])]:f.completedDates.filter(x=>x!==date);
+ save();
+}
+function renderCalendarOccurrences(){
+ let d=document.getElementById('calendarDate')?.value||today();
+ let recurring=fixedForDate(d).map(f=>({...f,kind:'fixed'}));
+ let punctual=(db.oneOff||[]).filter(e=>e.date===d).map(e=>({...e,kind:'oneoff'}));
+ let items=[...recurring,...punctual].sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+ let el=document.getElementById('calendarOccurrences');if(!el)return;
+ el.innerHTML=items.length?items.map(e=>`<div class="item"><div class="item-main"><div class="item-title">${esc(e.name)}</div><div class="meta"><span class="tag">${e.kind==='fixed'?'Fixa':e.isReminder?'Lembrete':'Pontual'}</span> ${esc(e.category||'Rotina')} · ${esc(e.time||'Sem horário')}${e.end?' – '+esc(e.end):''} · ${Number(e.duration||0).toLocaleString('pt-BR')}h</div>${e.notes?`<div class="meta">${esc(e.notes)}</div>`:''}</div><div class="item-actions" style="flex-wrap:wrap;justify-content:flex-end">${e.isReminder?'':`<label style="display:flex;align-items:center;gap:5px;margin:0;white-space:nowrap;font-size:12px">Horas reais <input type="number" min="0" step="0.25" value="${Number(e.kind==='fixed'?(db.fixed.find(f=>f.id===e.id)?.actualHoursByDate?.[d]||0):(e.actualHours||0))}" style="width:72px;padding:5px 6px" onchange="setCalendarActualHours('${e.kind}',${e.id},'${d}',this.value)" aria-label="Horas reais de ${esc(e.name)}"> h</label>`}${e.kind==='fixed'?`<label style="display:flex;align-items:center;gap:6px;margin:0;white-space:nowrap"><input type="checkbox" style="width:auto" ${e.completed?'checked':''} onchange="toggleFixed(${e.id},'${d}',this.checked)"> Concluída</label><button class="ghost small" onclick="openFixed(${e.id})">Abrir atividade</button>`:`<label style="display:flex;align-items:center;gap:6px;margin:0;white-space:nowrap"><input type="checkbox" style="width:auto" ${e.completed?'checked':''} onchange="toggleOneOff(${e.id},this.checked)"> Concluída</label><button class="ghost small" onclick="${e.isReminder?`openReminder(${e.id})`:`openOneOff(${e.id})`}">${e.isReminder?'Editar lembrete':'Abrir atividade'}</button><button class="danger small" onclick="deleteOneOff(${e.id})">Excluir</button>`}</div></div>`).join(''):'<div class="empty">Nenhuma atividade cadastrada para esta data. Adicione uma atividade fixa ou pontual.</div>';
+}
+function parseHoursValue(value){
+ if(value===null||value===undefined||String(value).trim()==='')return 0;
+ const raw=String(value).trim().replace(',','.');
+ const n=Number(raw);
+ return Number.isFinite(n)?n:NaN;
+}
+function setCalendarActualHours(kind,id,date,value){
+ const hours=parseHoursValue(value);
+ if(!Number.isFinite(hours)||hours<0){alert('Informe uma quantidade válida de horas.');renderCalendarOccurrences();return;}
+ if(kind==='fixed'){
+  const f=db.fixed.find(x=>String(x.id)===String(id));if(!f)return;
+  f.actualHoursByDate=f.actualHoursByDate||{};
+  f.actualHoursByDate[date]=hours;
+ }else{
+  const e=(db.oneOff||[]).find(x=>String(x.id)===String(id));if(!e)return;
+  e.actualHours=hours;
+ }
+ save();
+ renderCalendarOccurrences();
+ renderHome();
+}
+function toggleOneOff(id,checked){let e=(db.oneOff||[]).find(x=>x.id===id);if(!e)return;e.completed=checked;save()}
+function deleteOneOff(id){if(!confirm('Excluir esta atividade pontual?'))return;db.oneOff=(db.oneOff||[]).filter(x=>x.id!==id);save()}
+function openOneOff(id=null){
+ let e=(db.oneOff||[]).find(x=>x.id===id)||{},selectedDate=today();
+ modal(id?'Editar atividade pontual':'Nova atividade pontual',`<div class="formgrid">
+ <div class="wide"><label>Nome da atividade</label><input name="name" required value="${esc(e.name||'')}"></div>
+ <div><label>Data</label><input name="date" type="date" required value="${e.date||selectedDate}"></div>
+ <div><label>Tipo</label><select name="category">${['Reunião','Relatório','Rotina','Planejamento','Follow-up','Estudo','Outro'].map(v=>`<option value="${v}" ${(e.category||'Rotina')===v?'selected':''}>${v}</option>`).join('')}</select></div>
+ <div><label>Horário de início</label><input name="time" type="time" value="${e.time||''}"></div>
+ <div><label>Horário de término</label><input name="end" type="time" value="${e.end||''}"></div>
+ <div><label>Duração planejada (horas)</label><input name="duration" type="number" min="0" step="0.25" value="${e.duration||0}"></div>
+ <div><label>Projeto relacionado</label><select name="project"><option value="">Sem projeto</option>${db.projects.map(p=>`<option value="${p.id}" ${String(e.project||'')===String(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
+ <div class="wide"><label>Observações</label><textarea name="notes" rows="2">${esc(e.notes||'')}</textarea></div></div>`,fd=>{
+  let obj={id:id||Date.now(),name:fd.get('name'),date:fd.get('date'),time:fd.get('time'),end:fd.get('end'),duration:Number(fd.get('duration')||0),category:fd.get('category')||'Rotina',project:fd.get('project'),notes:fd.get('notes'),completed:!!e.completed};
+  if(id)db.oneOff=db.oneOff.map(x=>x.id===id?obj:x);else{db.oneOff=db.oneOff||[];db.oneOff.push(obj)}save();
+ },id?()=>{if(!confirm('Excluir esta atividade pontual?'))return false;deleteOneOff(id);return true}:null);
+}
+function openReminder(id=null){
+ let e=(db.oneOff||[]).find(x=>String(x.id)===String(id)&&x.isReminder)||{};
+ modal(id?'Editar lembrete':'Novo lembrete',`<div class="formgrid">
+ <div class="wide"><label>Lembrete</label><input name="name" required value="${esc(e.name||'')}" placeholder="O que você precisa lembrar?"></div>
+ <div><label>Data</label><input name="date" type="date" required value="${e.date||today()}"></div>
+ <div><label>Horário (opcional)</label><input name="time" type="time" value="${e.time||''}"></div>
+ <div class="wide"><label>Observações</label><textarea name="notes" rows="2" placeholder="Detalhes adicionais">${esc(e.notes||'')}</textarea></div>
+ </div>`,fd=>{
+  const obj={...e,id:id||Date.now(),name:fd.get('name'),date:fd.get('date'),time:fd.get('time'),end:'',duration:0,category:'Lembrete',isReminder:true,notes:fd.get('notes'),completed:!!e.completed};
+  db.oneOff=db.oneOff||[];if(id)db.oneOff=db.oneOff.map(x=>String(x.id)===String(id)?obj:x);else db.oneOff.push(obj);save();
+ },id?()=>{if(!confirm('Excluir este lembrete?'))return false;deleteOneOff(id);return true}:null);
+}
+function isoDateFromTimestamp(value){
+ if(!value)return '';
+ const d=new Date(value);
+ if(Number.isNaN(d.getTime()))return '';
+ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function leadTimeDays(start,end){
+ if(!start||!end)return null;
+ const a=new Date(start+'T00:00:00'),b=new Date(end+'T00:00:00');
+ if(Number.isNaN(a.getTime())||Number.isNaN(b.getTime()))return null;
+ return Math.max(0,Math.round((b-a)/86400000));
+}
+function ensureQueueDates(){
+ db.tasks.forEach(t=>{
+  if(['next','day','done'].includes(t.status)&&!t.queueEnteredAt){
+   t.queueEnteredAt=isoDateFromTimestamp(t.createdAt)||t.startDate||t.date||today();
+  }
+  if(['day','done'].includes(t.status)&&!t.executionStartedAt){
+   t.executionStartedAt=t.startDate||t.queueEnteredAt||today();
+  }
+  if(t.executionStartedAt&&t.startDate!==t.executionStartedAt)t.startDate=t.executionStartedAt;
+  if(t.status==='done'&&!t.completedAt)t.completedAt=t.endDate||today();
+  if(t.status!=='done'){t.completedAt='';t.endDate='';}
+ });
+}
+function renderDay(){
+ const d=document.getElementById('dayDate').value||today();
+ const dateLabel=fmt(d);
+ document.getElementById('dayHeading').textContent='Compromissos de '+dateLabel;
+ const fixed=fixedForDate(d).map(x=>({...x,kind:'fixed'}));
+ const punctual=(db.oneOff||[]).filter(e=>e.date===d).map(e=>({...e,kind:'oneoff'}));
+ const calendarItems=[...fixed,...punctual].sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+ const calendarEl=document.getElementById('dayCalendarList');
+ calendarEl.className='day-calendar-list';
+ calendarEl.innerHTML=calendarItems.length?calendarItems.map(e=>{
+  const isFixed=e.kind==='fixed',done=!!e.completed;
+  const actual=isFixed?(db.fixed.find(x=>String(x.id)===String(e.id))?.actualHoursByDate?.[d]||0):(e.actualHours||0);
+  const meta=[e.category||'Rotina',e.duration?Number(e.duration).toLocaleString('pt-BR')+'h planejadas':'',e.notes||''].filter(Boolean).join(' · ');
+  return `<div class="calendar-day-entry" style="${done?'opacity:.65':''}"><div class="calendar-day-time">${esc(e.time||'Sem horário')}${e.end?' – '+esc(e.end):''}</div><div><div class="calendar-day-title" style="${done?'text-decoration:line-through':''}">${esc(e.name)}</div><div class="calendar-day-meta"><span class="tag">${isFixed?'Fixa':e.isReminder?'Lembrete':'Pontual'}</span> ${esc(meta)}</div></div><div class="item-actions" style="flex-wrap:wrap;justify-content:flex-end">${e.isReminder?'':`<label style="display:flex;align-items:center;gap:5px;margin:0;font-size:11px;white-space:nowrap">Real <input type="number" min="0" step="0.25" value="${Number(actual)}" style="width:65px;padding:5px" onchange="setCalendarActualHours('${e.kind}',${e.id},'${d}',this.value)">h</label>`}<label style="display:flex;align-items:center;gap:5px;margin:0;font-size:11px;white-space:nowrap"><input type="checkbox" style="width:auto" ${done?'checked':''} onchange="${isFixed?`toggleFixed(${e.id},'${d}',this.checked)`:`toggleOneOff(${e.id},this.checked)`}"> Concluída</label><button class="ghost small" onclick="${isFixed?`openFixed(${e.id})`:e.isReminder?`openReminder(${e.id})`:`openOneOff(${e.id})`}">Editar</button></div></div>`;
+ }).join(''):'<div class="empty">Nenhum compromisso cadastrado no Calendário para esta data.</div>';
+ const waitingToday=db.tasks.filter(t=>t.status==='waiting'&&t.expectedResponseDate===d).sort((a,b)=>(a.waitingFor||'').localeCompare(b.waitingFor||'','pt-BR'));
+ document.getElementById('dayWaitingCount').textContent=waitingToday.length+' retorno'+(waitingToday.length===1?'':'s');
+ document.getElementById('dayWaitingList').innerHTML=waitingToday.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Aguardando de</th><th>Projeto</th><th>Ações</th></tr></thead><tbody>${waitingToday.map(t=>`<tr><td><strong>${esc(t.title)}</strong></td><td>${esc(t.waitingFor||'Não informado')}</td><td>${esc(projectName(t.project)||'—')}</td><td><button class="secondary small" onclick="editTask(${t.id})">Abrir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum retorno previsto para esta data.</div>';
+ const taskStatuses=[['next','Fila'],['day','Em execução'],['done','Concluída']];
+ const tasks=db.tasks.filter(t=>['next','day'].includes(t.status)||(t.status==='done'&&((t.completedAt||t.endDate||'')===d)));
+ const kanban=document.getElementById('dayKanban');
+ kanban.innerHTML=taskStatuses.map(([status,label])=>{
+  const list=tasks.filter(t=>t.status===status).sort((a,b)=>{const rank={Alta:0,Normal:1,Baixa:2};return (rank[a.priority]??1)-(rank[b.priority]??1)||(b.createdAt||b.id||0)-(a.createdAt||a.id||0)});
+  const cards=list.map(t=>{const statusCardClass=status==='next'?'kanban-status-next':status==='day'?'kanban-status-day':'kanban-status-done';return `<article class="kanban-card ${statusCardClass}" draggable="true" ondragstart="kanbanDragStart(event,${t.id})" onclick="" ><div class="row"><div class="kanban-card-title" onclick="editTask(${t.id})">${esc(t.title)}</div><span class="priority-text priority-${t.priority==='Alta'?'high':t.priority==='Baixa'?'low':'normal'}" title="Prioridade ${t.priority||'Normal'}">${esc(t.priority||'Normal')}</span></div><div style="margin-top:7px">${categoryTag(t.category)}</div><div class="kanban-card-meta">${t.project?esc(projectName(t.project))+' · ':''}${Number(t.plannedHours||0).toLocaleString('pt-BR')}h planejadas · ${Number(t.actualHours||0).toLocaleString('pt-BR')}h realizadas</div><div class="kanban-card-meta"><strong>Início:</strong> ${t.executionStartedAt?fmt(t.executionStartedAt):'—'} · <strong>Conclusão:</strong> ${t.completedAt?fmt(t.completedAt):'Em aberto'}</div><div class="kanban-card-meta"><strong>Lead time:</strong> ${(()=>{const n=leadTimeDays(t.executionStartedAt,t.completedAt||today());return (n??0)+' dia'+((n??0)===1?'':'s')})()}</div>${t.notes?`<div class="kanban-card-meta">${esc(t.notes)}</div>`:''}<div class="kanban-card-actions"><button class="ghost small" onclick="event.stopPropagation();editTask(${t.id})">✎ Editar</button>${status!=='next'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'next')">← Fila</button>`:''}${status!=='day'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'day')">▶ Em execução</button>`:''}${status!=='done'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'done')">✓ Concluir</button>`:''}</div></article>`}).join('');
+  return `<section class="kanban-column" data-kanban-status="${status}" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event,'${status}')"><div class="kanban-column-head"><span class="kanban-stage-tag kanban-stage-${status}">${label}</span><span class="kanban-count">${list.length}${status==='next'?'/5':status==='day'?'/2':''}</span></div><div class="kanban-stack">${cards||'<div class="kanban-empty">Solte uma ação aqui</div>'}</div></section>`;
+ }).join('');
+ const hours=v=>Number(v||0)||0;
+ const taskPlanned=tasks.reduce((a,t)=>a+hours(t.plannedHours),0),calendarPlanned=calendarItems.reduce((a,t)=>a+hours(t.duration),0);
+ const taskActual=tasks.reduce((a,t)=>a+hours(t.actualHours),0),calendarActual=calendarItems.reduce((a,t)=>a+hours(t.kind==='fixed'?(db.fixed.find(x=>String(x.id)===String(t.id))?.actualHoursByDate?.[d]):t.actualHours),0);
+ document.getElementById('plannedTotal').textContent=(taskPlanned+calendarPlanned).toLocaleString('pt-BR')+'h';
+ document.getElementById('actualTotal').textContent=(taskActual+calendarActual).toLocaleString('pt-BR')+'h';
+ document.getElementById('completedTotal').textContent=tasks.filter(t=>t.status==='done'||t.completed).length;
+ document.getElementById('fixedTotal').textContent=calendarItems.length;
+}
+let kanbanDraggedTask=null;
+function kanbanDragStart(event,id){kanbanDraggedTask=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',kanbanDraggedTask)}
+function kanbanDragOver(event){event.preventDefault();event.currentTarget.classList.add('drag-over');event.dataTransfer.dropEffect='move'}
+function kanbanDragLeave(event){if(!event.currentTarget.contains(event.relatedTarget))event.currentTarget.classList.remove('drag-over')}
+function kanbanDrop(event,status){event.preventDefault();event.currentTarget.classList.remove('drag-over');const id=event.dataTransfer.getData('text/plain')||kanbanDraggedTask;kanbanDraggedTask=null;if(id)moveKanbanTask(id,status)}
+function kanbanWipLimit(status){return status==='next'?5:status==='day'?2:Infinity}
+function canEnterKanbanStatus(task,status){
+ if(!['next','day'].includes(status)||task.status===status)return true;
+ const limit=kanbanWipLimit(status),count=db.tasks.filter(x=>x.status===status&&String(x.id)!==String(task.id)).length;
+ if(count>=limit){const label=status==='next'?'Fila':'Em execução';alert(`Limite WIP atingido: ${label} aceita no máximo ${limit} cards. Conclua ou mova um card antes de adicionar outro.`);return false;}
+ return true;
+}
+function moveKanbanTask(id,status){
+ const t=db.tasks.find(x=>String(x.id)===String(id));if(!t||!['next','day','done'].includes(status))return;
+ if(!canEnterKanbanStatus(t,status))return;
+ const previous=t.status;
+ if(status==='next'&&!t.queueEnteredAt)t.queueEnteredAt=today();
+ if(status==='day'&&!t.executionStartedAt){t.executionStartedAt=today();t.startDate=t.executionStartedAt;}
+ if(status==='done'){
+  if(!t.executionStartedAt){t.executionStartedAt=today();t.startDate=t.executionStartedAt;}
+  t.completed=true;t.completedAt=t.completedAt||today();t.endDate=t.completedAt;
+ }else{
+  t.completed=false;t.completedAt='';t.endDate='';
+ }
+ t.status=status;
+ save();
+}
+
+let agendaDragged=null;
+function agendaDragStart(event,kind,id){
+ agendaDragged={kind,id:String(id)};
+ event.dataTransfer.effectAllowed='move';
+ event.dataTransfer.setData('text/plain',JSON.stringify(agendaDragged));
+}
+function agendaDragOver(event){event.preventDefault();event.dataTransfer.dropEffect='move'}
+function agendaDrop(event,date,newTime){
+ event.preventDefault();
+ let payload=agendaDragged;
+ try{payload=JSON.parse(event.dataTransfer.getData('text/plain'))||payload}catch(e){}
+ agendaDragged=null;
+ if(!payload)return;
+ moveAgendaEntry(payload.kind,payload.id,date,newTime);
+}
+function moveAgendaEntry(kind,id,date,newTime){
+ const toMin=v=>{const m=String(v||'').match(/^(\\d{1,2}):(\\d{2})/);return m?Number(m[1])*60+Number(m[2]):null};
+ const fromMin=n=>String(Math.floor(n/60)%24).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
+ const shiftEnd=(oldStart,oldEnd,planned)=>{
+  const a=toMin(oldStart),b=toMin(oldEnd);
+  const duration=(a!==null&&b!==null&&b>a)?b-a:Math.max(30,Number(planned||0)*60);
+  return fromMin(toMin(newTime)+duration);
+ };
+ if(kind==='fixed'){
+  const f=db.fixed.find(x=>String(x.id)===String(id));if(!f)return;
+  f.dateOverrides=f.dateOverrides||{};
+  f.dateOverrides[date]={...(f.dateOverrides[date]||{}),time:newTime,end:shiftEnd(f.dateOverrides[date]?.time||f.time,f.dateOverrides[date]?.end||f.end,f.duration)};
+ }else if(kind==='oneoff'){
+  const e=(db.oneOff||[]).find(x=>String(x.id)===String(id));if(!e)return;
+  e.end=shiftEnd(e.time,e.end,e.duration);e.time=newTime;
+ }else if(kind==='task'){
+  const t=db.tasks.find(x=>String(x.id)===String(id));if(!t)return;
+  t.dateOverrides=t.dateOverrides||{};
+  t.dateOverrides[date]={...(t.dateOverrides[date]||{}),startTime:newTime,endTime:shiftEnd(t.dateOverrides[date]?.startTime||t.startTime,t.dateOverrides[date]?.endTime||t.endTime,t.plannedHours)};
+ }else return;
+ save();
+ const dateInput=document.getElementById('dayDate');if(dateInput)dateInput.value=date;
+ renderDay();
+}
+function updateNextStatus(id,status){
+ let t=db.tasks.find(x=>x.id===id);if(!t)return;
+ if(!canEnterKanbanStatus(t,status))return;
+ t.status=status;save();
+}
+function updateNextField(id,field,value){
+ let t=db.tasks.find(x=>x.id===id);if(!t)return;
+ if(field==='plannedHours')t.plannedHours=Math.max(0,Number(value)||0);
+ else if(field==='priority')t.priority=value;
+ save();
+}
+function renderNext(){
+ let q=(document.getElementById('nextSearch')?.value||'').toLowerCase(),pr=document.getElementById('nextProject')?.value||'';
+ let ps=document.getElementById('nextProject');if(ps){let val=ps.value;ps.innerHTML='<option value="">Todos os projetos</option>'+db.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');ps.value=val}
+ let ts=db.tasks.filter(t=>t.status==='next'&&t.title.toLowerCase().includes(q)&&(!pr||String(t.project)===pr)).sort((a,b)=>(a.startDate||a.date||'9999').localeCompare(b.startDate||b.date||'9999'));
+ const statusOptions=[['processing','Processamento'],['next','Próximas ações'],['day','Meu Dia'],['waiting','Aguardando'],['done','Concluída']];
+ document.getElementById('nextList').innerHTML=ts.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Prioridade</th><th>Horas planejadas</th><th>Projeto</th><th>Status</th><th>Abrir</th></tr></thead><tbody>${ts.map(t=>`<tr><td><span class="activity-name" onclick="editTask(${t.id})" title="Clique para abrir a atividade">${esc(t.title)}</span></td><td><select aria-label="Prioridade de ${esc(t.title)}" onchange="updateNextField(${t.id},'priority',this.value)"><option value="Alta" ${t.priority==='Alta'?'selected':''}>🔴 Alta</option><option value="Normal" ${(!t.priority||t.priority==='Normal')?'selected':''}>🟡 Normal</option><option value="Baixa" ${t.priority==='Baixa'?'selected':''}>🔵 Baixa</option></select></td><td><input class="next-hours" aria-label="Horas planejadas de ${esc(t.title)}" type="number" min="0" step="0.25" value="${Number(t.plannedHours||0)}" onchange="updateNextField(${t.id},'plannedHours',this.value)"></td><td>${esc(projectName(t.project)||'—')}</td><td><select aria-label="Status de ${esc(t.title)}" onchange="updateNextStatus(${t.id},this.value)">${statusOptions.map(([v,l])=>`<option value="${v}" ${t.status===v?'selected':''}>${l}</option>`).join('')}</select></td><td><button class="secondary small" onclick="editTask(${t.id})" title="Abrir detalhes da atividade">Abrir ↗</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhuma próxima ação encontrada. Mova uma atividade do backlog para Próximas ações.</div>';
+}
+function renderMeetings(){
+ const q=(document.getElementById('processingSearch')?.value||'').toLowerCase();
+ const status=document.getElementById('processingStatus')?.value||'';
+ const items=db.tasks.filter(t=>t.status==='processing'||(status&&t.status===status))
+  .filter(t=>(!status||t.status===status)&&(`${t.title||''} ${t.notes||''} ${t.waitingFor||''}`).toLowerCase().includes(q))
+  .sort((a,b)=>(b.createdAt||b.id||0)-(a.createdAt||a.id||0));
+ document.getElementById('meetingList').innerHTML=items.length?items.map(t=>{const entered=isoDateFromTimestamp(t.createdAt)||t.brainDumpEnteredAt||today(),days=leadTimeDays(entered,today())??0;return `<div class="item"><div class="item-main"><div class="item-title" style="cursor:pointer" onclick="editTask(${t.id})">${esc(t.title)}</div><div class="meta">${categoryTag(t.category)} ${t.project?esc(projectName(t.project))+' · ':''}${t.startDate?fmt(t.startDate):'Ainda sem data'} · ${statusLabel(t.status)}</div><div class="meta"><strong>Lead Time no Brain Dump:</strong> ${days} dia${days===1?'':'s'}</div>${t.notes?`<div class="meta">${esc(t.notes)}</div>`:''}</div><div class="item-actions">${t.status==='processing'?`<button class="secondary small" onclick="convertBrainDumpToTask(${t.id})">Transformar em atividade</button><button class="secondary small" onclick="convertBrainDumpToProject(${t.id})">Transformar em projeto</button>`:''}<button class="ghost small" onclick="editTask(${t.id})">Completar dados</button></div></div>`}).join(''):'<div class="empty">Nenhuma atividade nesta lista. Capture uma nova atividade para processar depois.</div>';
+}
+function openProcessingTask(){
+ modal('Capturar atividade',`<div class="formgrid"><div class="wide"><label>O que surgiu?</label><input name="title" required autofocus placeholder="Digite uma descrição breve da atividade"></div><div><label>Categoria</label><select name="category"><option value="">Selecione</option><option>PMO</option><option>Comitê de Produto</option><option>BackOffice</option></select></div></div>`,fd=>{
+  db.tasks.push({id:Date.now(),title:fd.get('title'),category:fd.get('category')||'',status:'processing',project:null,startDate:'',endDate:'',startTime:'',endTime:'',plannedHours:0,actualHours:0,priority:'Normal',waitingFor:'',expectedResponseDate:'',notes:'',createdAt:Date.now()});
+  save();
+ });
+}
+
+function convertBrainDumpToTask(id){
+ const t=db.tasks.find(x=>String(x.id)===String(id));if(!t)return;
+ if(!canEnterKanbanStatus(t,'next'))return;
+ const entered=isoDateFromTimestamp(t.createdAt)||t.brainDumpEnteredAt||today();
+ t.status='next';t.queueEnteredAt=entered;t.startDate=entered;t.brainDumpEnteredAt=entered;
+ save();go('day');
+}
+function convertBrainDumpToProject(id){
+ const t=db.tasks.find(x=>String(x.id)===String(id));if(!t)return;
+ const entered=isoDateFromTimestamp(t.createdAt)||t.brainDumpEnteredAt||today();
+ const days=leadTimeDays(entered,today())??0;
+ const name=prompt('Nome do projeto:',t.title||'');if(name===null)return;
+ const outcome=prompt('Resultado esperado (opcional):',t.notes||'');if(outcome===null)return;
+ const projectId=Date.now();
+ db.projects.push({id:projectId,name:name.trim()||t.title,outcome,category:t.category||'',due:'',status:'active',priority:t.priority==='Alta'?'Alta':t.priority==='Baixa'?'Baixa':'Média',progress:0,milestone:'',risk:'',notesLog:[],brainDumpEnteredAt:entered,brainDumpDaysAtConversion:days});
+ db.tasks=db.tasks.filter(x=>String(x.id)!==String(id));
+ save();go('projects');
+}
+
+
+async function copyNoteMinutes(id){
+ const e=(db.agendaEntries||[]).find(x=>String(x.id)===String(id));
+ if(!e){alert('Ata não encontrada.');return;}
+ const escHtml=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const dateLabel=fmt(e.date||today()),val=v=>String(v||'Não informado');
+ const actions=Array.isArray(e.actionsList)&&e.actionsList.length?e.actionsList:[{description:e.actions||'',responsible:e.responsible||'',deadline:e.deadline||''}];
+ const sections=[['01.','OBJETIVO / PAUTA',e.agenda||e.notes],['02.','DISCUSSÕES / PRINCIPAIS PONTOS',e.discussion],['03.','DECISÕES TOMADAS',e.decisions]];
+ const sectionHtml=sections.map(([n,h,v])=>`<tr><td style="padding:22px 20px 12px 20px;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;color:#294b6b">${n} &nbsp; ${h}</td></tr><tr><td style="padding:0 20px 22px 20px;font-family:Arial,sans-serif;font-size:14px;line-height:1.65;color:#333333;white-space:pre-wrap">${escHtml(val(v))}</td></tr>`).join('');
+ const actionRows=actions.filter(x=>x.description||x.responsible||x.deadline).map((x,i)=>`<tr><td width="58%" style="padding:12px 14px;border-bottom:1px solid #e5eaf0;font-family:Arial,sans-serif;font-size:13px;line-height:1.5;color:#243447">${i+1}. ${escHtml(x.description||'—')}</td><td width="24%" style="padding:12px 10px;border-bottom:1px solid #e5eaf0;font-family:Arial,sans-serif;font-size:13px;color:#334155;overflow-wrap:anywhere">${escHtml(val(x.responsible))}</td><td width="18%" style="padding:12px 8px;border-bottom:1px solid #e5eaf0;font-family:Arial,sans-serif;font-size:13px;color:#334155">${escHtml(x.deadline?fmt(x.deadline):'Não informado')}</td></tr>`).join('')||'<tr><td colspan="3" style="padding:14px;font-family:Arial,sans-serif;font-size:13px;color:#64748b">Nenhuma ação registrada.</td></tr>';
+ const horario=e.time?(e.endTime?`${e.time} às ${e.endTime}`:e.time):(e.endTime?`Até ${e.endTime}`:'Não informado');
+ const meta=[['DATA',dateLabel],['HORÁRIO',horario],['PROJETO',val(e.projectName)],['PARTICIPANTES',val(e.participants)]];
+ const metaHtml=meta.map(([k,v])=>`<td width="50%" valign="top" style="padding:12px 14px;border:1px solid #e2e8f0;background-color:#ffffff"><div style="font-family:Arial,sans-serif;font-size:10px;font-weight:bold;letter-spacing:1px;color:#718096;margin-bottom:5px">${k}</div><div style="font-family:Arial,sans-serif;font-size:13px;line-height:1.45;color:#243447">${escHtml(v)}</div></td>`).join('');
+ const html=`<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background-color:#ffffff"><tr><td align="center" style="padding:0;background-color:#ffffff"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="960" style="width:100%;max-width:960px;border:1px solid #dbe3ec;border-collapse:collapse;background-color:#ffffff"><tr><td bgcolor="#F5F5F5" align="center" style="padding:22px 24px;background-color:#F5F5F5 !important;color:#294b6b !important;text-align:center"><font face="Arial, sans-serif" color="#294B6B" size="6"><b><span style="color:#294B6B !important;font-size:30px;line-height:1.3">ATA DE REUNIÃO</span></b></font></td></tr><tr><td style="padding:20px 20px 8px;background-color:#ffffff"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background-color:#ffffff"><tr>${metaHtml.slice(0,metaHtml.indexOf('</td>')+5)}${metaHtml.slice(metaHtml.indexOf('</td>')+5,metaHtml.indexOf('</td>',metaHtml.indexOf('</td>')+5)+5)}</tr><tr>${metaHtml.slice(metaHtml.indexOf('</td>',metaHtml.indexOf('</td>')+5)+5)}</tr></table></td></tr>${sectionHtml}<tr><td style="padding:22px 20px 12px 20px;font-family:Arial,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1px;color:#294b6b;background-color:#ffffff">04. &nbsp; AÇÕES / ENCAMINHAMENTOS</td></tr><tr><td style="padding:0 20px 22px;background-color:#ffffff"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;border:1px solid #e2e8f0;background-color:#ffffff;table-layout:fixed"><colgroup><col style="width:58%"><col style="width:24%"><col style="width:18%"></colgroup><tr><th width="58%" align="left" style="padding:11px 14px;border-bottom:1px solid #dbe3ec;background-color:#ffffff;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.5px;color:#35536e">AÇÃO</th><th width="24%" align="left" style="padding:11px 10px;border-bottom:1px solid #dbe3ec;background-color:#ffffff;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.5px;color:#35536e">RESPONSÁVEL</th><th width="18%" align="left" style="padding:11px 8px;border-bottom:1px solid #dbe3ec;background-color:#ffffff;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.5px;color:#35536e">PRAZO</th></tr>${actionRows}</table></td></tr></table></td></tr></table>`;
+ const plain=`ATA DE REUNIÃO\n${e.title||'Reunião'}\n\nDATA: ${dateLabel}\nHORÁRIO: ${val(e.time)}\nPROJETO: ${val(e.projectName)}\nPARTICIPANTES: ${val(e.participants)}\n\n${sections.map(([n,h,v])=>`${n}. ${h}\n${val(v)}`).join('\n\n')}\n\n04. AÇÕES / ENCAMINHAMENTOS\n${actions.map((x,i)=>`${i+1}. ${x.description||''}\n   Responsável: ${val(x.responsible)}\n   Prazo: ${x.deadline?fmt(x.deadline):'Não informado'}`).join('\n\n')}`;
+ try{
+  if(navigator.clipboard?.write&&window.ClipboardItem)await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);
+  else if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(plain);
+  else{const area=document.createElement('textarea');area.value=plain;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();const ok=document.execCommand('copy');area.remove();if(!ok)throw new Error('copy failed');}
+  alert('Ata formatada copiada! Cole diretamente no corpo do e-mail.');
+ }catch(err){alert('Não foi possível copiar automaticamente. Verifique a permissão de área de transferência do navegador e tente novamente.');}
+}
+let meetingActionCounter=0;
+function addMeetingActionRow(){
+ const wrap=document.getElementById('meetingActions');if(!wrap)return;
+ const i=Date.now()+meetingActionCounter++;
+ const row=document.createElement('div');row.className='meeting-action-row';row.style.cssText='display:grid;grid-template-columns:minmax(180px,2fr) minmax(140px,1fr) minmax(130px,1fr) auto;gap:8px;align-items:end;margin:0 0 10px';
+ row.innerHTML=`<div><label>Ação</label><input name="actionDescription_${i}" placeholder="Descreva a ação"></div><div><label>Responsável</label><input name="actionResponsible_${i}" placeholder="Responsável"></div><div><label>Prazo</label><input type="date" name="actionDeadline_${i}"></div><button type="button" class="ghost small" onclick="this.closest('.meeting-action-row').remove()">Remover</button>`;
+ wrap.appendChild(row);
+}
+function openAgendaEntry(id=null){
+ const entries=Array.isArray(db.agendaEntries)?db.agendaEntries:[],e=entries.find(x=>x.id===id)||{},projectOptions=db.projects.map(p=>`<option value="${p.id}" ${String(e.projectId)===String(p.id)?'selected':''}>${esc(p.name)}</option>`).join('');
+ const actionRows=Array.isArray(e.actionsList)&&e.actionsList.length?e.actionsList:[{description:e.actions||'',responsible:e.responsible||'',deadline:e.deadline||''}];
+ modal(id?'Editar ata de reunião':'Nova ata de reunião',`<div class="formgrid">
+ <div class="wide"><label>Assunto / título da reunião</label><input name="title" required value="${esc(e.title||'')}" placeholder="Ex.: Alinhamento do projeto"></div>
+ <div><label>Data</label><input type="date" name="date" required value="${e.date||document.getElementById('agendaDate').value||today()}"></div>
+ <div><label>Horário de início</label><input type="time" name="time" value="${e.time||''}"></div>
+ <div><label>Horário de fim</label><input type="time" name="endTime" value="${e.endTime||''}"></div>
+ <div class="wide"><label>Projeto</label><input name="projectName" value="${esc(e.projectName||'')}" placeholder="Digite o nome do projeto"></div>
+ <div class="wide"><label>Participantes</label><textarea name="participants" rows="2" placeholder="Informe os participantes">${esc(e.participants||'')}</textarea></div>
+ <div class="wide"><label>Objetivo / pauta</label><textarea name="agenda" rows="3" placeholder="Objetivo e assuntos previstos">${esc(e.agenda||e.notes||'')}</textarea></div>
+ <div class="wide"><label>Discussões / principais pontos abordados</label><textarea name="discussion" rows="4" placeholder="Registre os principais pontos discutidos">${esc(e.discussion||'')}</textarea></div>
+ <div class="wide"><label>Decisões tomadas</label><textarea name="decisions" rows="3" placeholder="Registre as decisões acordadas">${esc(e.decisions||'')}</textarea></div>
+ <div class="wide"><label>Ações / encaminhamentos</label><div id="meetingActions">${actionRows.map((a,i)=>`<div class="meeting-action-row" style="display:grid;grid-template-columns:minmax(180px,2fr) minmax(140px,1fr) minmax(130px,1fr) auto;gap:8px;align-items:end;margin:0 0 10px"><div><label>Ação</label><input name="actionDescription_${i}" value="${esc(a.description||'')}" placeholder="Descreva a ação"></div><div><label>Responsável</label><input name="actionResponsible_${i}" value="${esc(a.responsible||'')}" placeholder="Responsável"></div><div><label>Prazo</label><input type="date" name="actionDeadline_${i}" value="${a.deadline||''}"></div><button type="button" class="ghost small" onclick="this.closest('.meeting-action-row').remove()">Remover</button></div>`).join('')}</div><button type="button" class="secondary small" onclick="addMeetingActionRow()">＋ Adicionar ação</button></div>
+ </div>`,fd=>{
+ const project=db.projects.find(p=>String(p.id)===String(fd.get('projectId')));
+ const indexes=[...fd.keys()].map(k=>/^actionDescription_(\d+)$/.exec(k)).filter(Boolean).map(m=>Number(m[1]));
+ const actionsList=indexes.map(i=>({description:fd.get(`actionDescription_${i}`)||'',responsible:fd.get(`actionResponsible_${i}`)||'',deadline:fd.get(`actionDeadline_${i}`)||''})).filter(x=>x.description||x.responsible||x.deadline);
+ const obj={...e,id:id||Date.now(),title:fd.get('title'),date:fd.get('date'),time:fd.get('time'),endTime:fd.get('endTime'),projectId:'',projectName:fd.get('projectName')||'',participants:fd.get('participants'),agenda:fd.get('agenda'),discussion:fd.get('discussion'),decisions:fd.get('decisions'),actionsList,actions:actionsList.map(x=>x.description).join('\n'),notes:fd.get('agenda')};
+ db.agendaEntries=Array.isArray(db.agendaEntries)?db.agendaEntries:[];if(id)db.agendaEntries=db.agendaEntries.map(x=>x.id===id?obj:x);else db.agendaEntries.push(obj);document.getElementById('agendaDate').value=obj.date;save();
+ });
+}
+function createTaskFromAgenda(id){const e=(db.agendaEntries||[]).find(x=>x.id===id);if(!e)return;openTask(null,'next',e.projectId||null,{title:e.title,notes:`Registro da agenda (${fmt(e.date)}${e.time?' '+e.time:''}):\\n${e.notes||''}`});}
+function deleteAgendaEntry(id){if(!confirm('Excluir este registro da agenda?'))return;db.agendaEntries=(db.agendaEntries||[]).filter(e=>e.id!==id);save()}
+function renderProjects(){
+ let el=document.getElementById('projectList'),q=(document.getElementById('projectSearch')?.value||'').toLowerCase(),sel=document.getElementById('projectCategoryFilter'),cat=sel?.value||'',statusSel=document.getElementById('projectStatusFilter'),status=statusSel?.value||'';
+ if(sel){let old=cat,cats=[...new Set(db.projects.map(p=>p.category).filter(Boolean))].sort();sel.innerHTML='<option value="">Todas as categorias</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');sel.value=old}
+ let projects=db.projects.filter(p=>(!cat||p.category===cat)&&(!status||((p.status||'active')===status))&&(`${p.name} ${p.category||''}`).toLowerCase().includes(q));
+ const statusNames={active:'Em andamento',done:'Concluído',attention:'Em atenção',paused:'Pausado'};
+ const cards=projects.map(p=>{
+  let ts=db.tasks.filter(t=>String(t.project)===String(p.id)),done=ts.filter(t=>t.completed||t.status==='done').length,pct=ts.length?Math.round(done/ts.length*100):0;
+  const starts=ts.map(t=>t.executionStartedAt||t.startDate).filter(Boolean).sort();
+  const allFinished=ts.length>0&&done===ts.length;
+  const finishes=allFinished?ts.map(t=>t.completedAt||t.endDate).filter(Boolean).sort():[];
+  const projectStart=starts[0]||'';
+  const projectEnd=finishes.length===ts.length?finishes[finishes.length-1]:'';
+  const projectLeadTime=projectStart?leadTimeDays(projectStart,projectEnd||today()):null;
+  const projectLeadTimeLabel=projectLeadTime===null?'Aguardando início':`${projectLeadTime} dia${projectLeadTime===1?'':'s'}${projectEnd?' até a conclusão':' em andamento'}`;
+  const catClass=p.category==='PMO'?'project-cat-pmo':p.category==='Comitê de Produto'?'project-cat-comite':p.category==='BackOffice'?'project-cat-backoffice':'project-cat-none';
+  let taskRows=ts.length?ts.map(t=>`<div class="project-task-row ${t.status==='done'?'is-done':''}"><div class="project-task-info"><strong>${esc(t.title)}</strong><span>${statusLabel(t.status)} · ${esc(t.priority||'Normal')} · ${Number(t.plannedHours||0).toLocaleString('pt-BR')}h planejadas</span></div><button class="secondary small" onclick="editTask(${t.id})">Abrir</button></div>`).join(''):'<div class="project-no-tasks">Nenhuma atividade vinculada a este projeto.</div>';
+  return `<article class="project-card-v10">
+   <div class="project-card-top">
+    <div class="project-card-heading"><div class="project-card-title">${esc(p.name)}</div></div>
+    <span class="tag project-status-tag status-${esc(p.status||'active')}">${statusNames[p.status||'active']||'Em andamento'}</span>
+   </div>
+   <div class="project-card-meta">${categoryTag(p.category)}</div>
+   <div class="project-period"><div><strong>Início do projeto</strong><span>${projectStart?fmt(projectStart):'Aguardando início da primeira ação'}</span></div><div><strong>Fim do projeto</strong><span>${projectEnd?fmt(projectEnd):'Pendente de conclusão das ações'}</span></div><div><strong>Lead Time</strong><span>${projectLeadTimeLabel}</span></div></div>
+   <div class="project-progress-line"><div class="project-progress-label"><strong>Progresso</strong><span>${done} de ${ts.length} ações concluídas · ${pct}%</span></div><div class="progress"><span style="width:${pct}%"></span></div></div>
+   <div class="project-card-actions"><button class="secondary small" onclick="openTask(null,'next',${p.id})">＋ Nova ação</button><button class="ghost small" onclick="editProject(${p.id})">✎ Editar projeto</button><button class="ghost small danger-text" onclick="deleteProject(${p.id})">Excluir</button></div>
+   <details class="project-expand-v10"><summary>Atividades vinculadas <span class="tag">${ts.length}</span></summary><div class="project-task-list">${taskRows}</div></details>
+  </article>`;
+ }).join('');
+ el.innerHTML=cards?`<div class="project-grid-v10">${cards}</div>`:'<div class="card"><div class="empty">Nenhum projeto encontrado para esse filtro.</div></div>';
+}
+function weekBounds(dateStr){let d=new Date((dateStr||today())+'T12:00:00'),day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);let start=new Date(d),end=new Date(d);end.setDate(start.getDate()+6);let iso=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');return {start:iso(start),end:iso(end)}}
+function renderReview(){
+ const input=document.getElementById('reviewDate');if(!input)return;
+ const {start,end}=weekBounds(input.value||today());
+ document.getElementById('weekHeading').textContent=`Atividades executadas · ${fmt(start)} a ${fmt(end)}`;
+ const inWeek=d=>!!d&&d>=start&&d<=end;
+ const taskRows=db.tasks
+  .filter(t=>(t.completed||t.status==='done')&&inWeek(t.completedAt||t.endDate||t.startDate||t.date))
+  .map(t=>({kind:'task',id:t.id,title:t.title,project:t.project,date:t.completedAt||t.endDate||t.startDate||t.date,planned:parseHoursValue(t.plannedHours)||0,actual:parseHoursValue(t.actualHours)||0}));
+ const oneOffRows=(db.oneOff||[])
+  .filter(e=>e.completed&&inWeek(e.date))
+  .map(e=>({kind:'oneoff',id:e.id,title:e.name,project:e.project,date:e.date,planned:parseHoursValue(e.duration)||0,actual:parseHoursValue(e.actualHours)||0}));
+ const fixedRows=[];
+ (db.fixed||[]).forEach(f=>{
+  (f.completedDates||[]).filter(inWeek).forEach(date=>{
+   fixedRows.push({kind:'fixed',id:f.id,title:f.name,project:f.project,date,planned:parseHoursValue(f.duration)||0,actual:parseHoursValue(f.actualHoursByDate?.[date])||0});
+  });
+ });
+ const rows=[...taskRows,...oneOffRows,...fixedRows].sort((a,b)=>a.date.localeCompare(b.date)||(a.title||'').localeCompare(b.title||'','pt-BR'));
+ const planned=rows.reduce((a,r)=>a+r.planned,0);
+ const actual=rows.reduce((a,r)=>a+r.actual,0);
+ document.getElementById('weekCount').textContent=rows.length;
+ document.getElementById('weekPlanned').textContent=planned.toLocaleString('pt-BR')+'h';
+ document.getElementById('weekActual').textContent=actual.toLocaleString('pt-BR')+'h';
+ document.getElementById('weekDelta').textContent=(rows.length?planned/rows.length:0).toFixed(2).replace('.',',')+'h';
+ document.getElementById('reviewList').innerHTML=rows.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Projeto</th><th>Data de conclusão</th><th>Horas planejadas</th><th>Horas realizadas</th><th>Ações</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(r.title||'')}</strong><span class="tag" style="margin-left:6px">${r.kind==='fixed'?'Fixa':r.kind==='oneoff'?'Calendário':'Tarefa'}</span></td><td>${esc(projectName(r.project)||'—')}</td><td>${fmt(r.date)}</td><td>${r.planned.toLocaleString('pt-BR')}h</td><td>${r.actual.toLocaleString('pt-BR')}h</td><td><button class="secondary small" onclick="${r.kind==='task'?`editTask(${r.id})`:r.kind==='fixed'?`openFixed(${r.id})`:`openOneOff(${r.id})`}">Abrir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhuma atividade concluída nesta semana.</div>';
+}
+function renderWaiting(){
+ const el=document.getElementById('waitingList'),todayDate=today();
+ const tasks=db.tasks.filter(t=>t.status==='waiting').sort((a,b)=>(a.expectedResponseDate||'9999').localeCompare(b.expectedResponseDate||'9999')||(a.waitingFor||'Sem pessoa definida').localeCompare(b.waitingFor||'Sem pessoa definida','pt-BR'));
+ if(!tasks.length){el.innerHTML='<div class="card"><div class="empty">Nenhuma atividade aguardando retorno.</div></div>';return;}
+ const rows=tasks.map(t=>`<tr class="${t.expectedResponseDate===todayDate?'row-due':''}"><td><span class="activity-name" onclick="editTask(${t.id})">${esc(t.title)}</span></td><td>${esc((t.waitingFor||'Sem pessoa definida').trim()||'Sem pessoa definida')}</td><td>${esc(projectName(t.project)||'—')}</td><td>${t.expectedResponseDate?fmt(t.expectedResponseDate):'—'}</td><td>${t.expectedResponseDate===todayDate?'<span class="tag wait">Hoje</span>':t.expectedResponseDate&&t.expectedResponseDate<todayDate?'<span class="tag danger-tag">Atrasado</span>':'<span class="tag">Pendente</span>'}</td><td><button class="secondary small" onclick="editTask(${t.id})">Editar</button></td></tr>`).join('');
+ el.innerHTML=`<div class="card"><div class="row" style="margin-bottom:12px"><h3>Retornos pendentes</h3><span class="tag">${tasks.length} atividades</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Aguardando retorno de</th><th>Projeto</th><th>Data esperada</th><th>Situação</th><th>Ações</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+function setActualHours(id,value){
+ let t=db.tasks.find(x=>String(x.id)===String(id));if(!t)return;
+ const hours=parseHoursValue(value);
+ if(!Number.isFinite(hours)||hours<0){alert('Informe uma quantidade válida de horas.');renderDay();return;}
+ t.actualHours=hours;
+ save();
+ renderDay();
+ renderHome();
+ renderReview();
+}
+function deleteTask(id){
+ if(!confirm('Excluir esta atividade? Esta ação não poderá ser desfeita.'))return;
+ db.tasks=db.tasks.filter(t=>String(t.id)!==String(id));
+ save();
+ renderAll();
+}
+function completeTask(id,checked){
+ let t=db.tasks.find(x=>x.id===id);if(!t)return;
+ if(!checked&&!canEnterKanbanStatus(t,'day'))return;
+ if(!t.executionStartedAt){t.executionStartedAt=today();t.startDate=t.executionStartedAt;}
+ t.status=checked?'done':'day';t.completed=checked;
+ t.completedAt=checked?today():'';
+ t.endDate=checked?today():'';
+ save();
+}
+function modal(title,body,cb,onDelete=null){
+ let d=document.getElementById('modal'),f=document.getElementById('form'),del=document.getElementById('modalDeleteBtn');
+ document.getElementById('modalTitle').textContent=title;
+ document.getElementById('modalBody').innerHTML=body;
+ del.style.display=onDelete?'inline-flex':'none';
+ del.onclick=onDelete?()=>{if(onDelete())d.close()}:null;
+ f.onsubmit=e=>{e.preventDefault();cb(new FormData(f));d.close()};
+ d.showModal();
+}
+function closeModal(){document.getElementById('modal').close()}
+function openTask(id=null,status='next',projectId=null,seed=null){
+ let t=db.tasks.find(x=>x.id===id)||seed||{},currentStatus=t.status||status,pid=t.project||projectId||'';
+ modal(id?'Editar atividade':'Nova atividade',`<div class="formgrid">
+ <div class="wide"><label>Atividade</label><input name="title" required autofocus value="${esc(t.title||'')}"></div>
+ <div><label>Status GTD</label><select name="status">${[['next','Próximas ações'],['day','Meu Dia'],['waiting','Aguardando'],['done','Concluída']].map(([v,l])=>`<option value="${v}" ${currentStatus===v?'selected':''}>${l}</option>`).join('')}</select></div>
+ <div><label>Projeto relacionado</label><select name="project"><option value="">Sem projeto</option>${db.projects.map(p=>`<option value="${p.id}" ${String(pid)===String(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
+ <div><label>Categoria</label><select name="category"><option value="">Selecione</option>${['PMO','Comitê de Produto','BackOffice'].map(c=>`<option value="${c}" ${(t.category||'')===c?'selected':''}>${c}</option>`).join('')}</select></div>
+ <div><label>Data de início</label><input name="startDate" type="date" value="${t.startDate||t.date||''}"></div>
+ <div><label>Data de fim</label><input name="endDate" type="date" value="${t.completedAt||t.endDate||''}" ${currentStatus!=='done'?'disabled title="Disponível quando a atividade estiver concluída"':''}></div>
+ <div><label>Horas planejadas</label><input name="plannedHours" type="number" min="0" step="0.25" value="${t.plannedHours||0}" placeholder="Ex.: 1,5"></div><div><label>Horas realizadas</label><input name="actualHours" type="number" min="0" step="0.25" value="${t.actualHours||0}" placeholder="Ex.: 1,5"></div>
+ <div><label>Prioridade</label><select name="priority">${[['Alta','🔴 Alta'],['Normal','🟡 Normal'],['Baixa','🔵 Baixa']].map(([v,l])=>`<option value="${v}" ${t.priority===v?'selected':''}>${l}</option>`).join('')}</select></div>
+ <div class="wide" id="waitingField"><label>Aguardando retorno de</label><input name="waitingFor" value="${esc(t.waitingFor||'')}" placeholder="Nome da pessoa ou área"></div>
+ <div><label>Data esperada de resposta</label><input name="expectedResponseDate" type="date" value="${t.expectedResponseDate||''}"></div>
+ <div class="wide"><label>Observações</label><textarea name="notes" rows="3">${esc(t.notes||'')}</textarea></div></div>`,fd=>{
+  let selectedStatus=fd.get('status');
+  const capacityTask={...t,id:id||'__new__'};
+  if(!canEnterKanbanStatus(capacityTask,selectedStatus))return;
+  let queueEnteredAt=t.queueEnteredAt||'';
+  if(['next','day','done'].includes(selectedStatus)&&!queueEnteredAt)queueEnteredAt=isoDateFromTimestamp(t.createdAt)||today();
+  let startDate=fd.get('startDate')||'';
+  let executionStartedAt=startDate;
+  if(['day','done'].includes(selectedStatus)&&!executionStartedAt)executionStartedAt=today();
+  if(['day','done'].includes(selectedStatus)&&!startDate)startDate=executionStartedAt;
+  let completedAt=selectedStatus==='done'?(fd.get('endDate')||t.completedAt||today()):'';
+  let endDate=selectedStatus==='done'?completedAt:'';
+  let obj={...t,id:id||Date.now(),title:fd.get('title'),status:selectedStatus,queueEnteredAt,executionStartedAt,completedAt,completed:selectedStatus==='done',project:fd.get('project')?Number(fd.get('project')):null,startDate,endDate,plannedHours:Number(fd.get('plannedHours')||0),actualHours:Number(fd.get('actualHours')||0),priority:fd.get('priority'),category:fd.get('category')||'',waitingFor:fd.get('waitingFor'),expectedResponseDate:fd.get('expectedResponseDate'),notes:fd.get('notes'),createdAt:t.createdAt||Date.now()};
+  if(id)db.tasks=db.tasks.map(x=>x.id===id?obj:x);else db.tasks.push(obj);save();
+ },id?()=>{if(!confirm('Excluir esta atividade? Esta ação não poderá ser desfeita.'))return false;db.tasks=db.tasks.filter(x=>String(x.id)!==String(id));save();return true}:null);
+}
+function editTask(id){openTask(id)}
+function openFixed(id=null){
+ let f=db.fixed.find(x=>x.id===id)||{},days=f.days||['1','2','3','4','5'];
+ modal(id?'Editar atividade fixa':'Nova atividade fixa',`<div class="formgrid"><div class="wide"><label>Nome da atividade</label><input name="name" required value="${esc(f.name||'')}"></div><div><label>Horário de início</label><input name="time" type="time" required value="${f.time||'09:00'}"></div><div><label>Horário de término</label><input name="end" type="time" value="${f.end||'10:00'}"></div><div><label>Duração planejada (horas)</label><input name="duration" type="number" min="0" step="0.25" value="${f.duration||1}"></div><div><label>Tipo</label><select name="category">${[["Reunião","Reunião"],["Relatório","Relatório"],["Rotina","Rotina"],["Planejamento","Planejamento"],["Follow-up","Follow-up"],["Estudo","Estudo"],["Outro","Outro"]].map(([v,l])=>`<option value="${v}" ${(f.category||"Rotina")===v?"selected":""}>${l}</option>`).join("")}</select></div><div class="wide"><label>Repetir em</label><div style="display:flex;gap:10px;flex-wrap:wrap">${['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map((d,i)=>`<label style="display:flex;align-items:center;gap:4px;color:var(--ink)"><input style="width:auto" type="checkbox" name="days" value="${i}" ${days.includes(String(i))?'checked':''}>${d}</label>`).join('')}</div></div><div class="wide"><label>Observações</label><textarea name="notes" rows="2">${esc(f.notes||'')}</textarea></div></div>`,fd=>{let obj={id:id||Date.now(),name:fd.get('name'),time:fd.get('time'),end:fd.get('end'),duration:Number(fd.get('duration')||0),category:fd.get('category')||'Rotina',days:fd.getAll('days'),notes:fd.get('notes'),completedDates:f.completedDates||[],actualHoursByDate:f.actualHoursByDate||{}};if(id)db.fixed=db.fixed.map(x=>x.id===id?obj:x);else db.fixed.push(obj);save()},id?()=>{if(!confirm('Excluir esta atividade fixa?'))return false;deleteFixed(id);return true}:null)
+}
+function renderFixed(){
+ let el=document.getElementById('fixedList');
+ const dayNames=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+ const fixed=db.fixed.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+ const fixedRows=fixed.map(f=>`<tr>
+  <td><span class="activity-name" onclick="openFixed(${f.id})">${esc(f.name)}</span></td>
+  <td><span class="type-label">${esc(f.category||'Rotina')}</span></td>
+  <td>${(f.days||[]).map(d=>dayNames[Number(d)]).join(', ')||'—'}</td>
+  <td>${esc(f.time||'—')}${f.end?' – '+esc(f.end):''}</td>
+  <td>${Number(f.duration||0).toLocaleString('pt-BR')}h</td>
+  <td><div class="actions"><button class="secondary small" onclick="openFixed(${f.id})">Editar</button><button class="danger small" onclick="deleteFixed(${f.id})">Excluir</button></div></td>
+ </tr>`).join('');
+ const oneOffs=(db.oneOff||[]).filter(e=>!e.completed).slice().sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')||(a.time||'').localeCompare(b.time||''));
+ const oneRows=oneOffs.map(e=>`<tr>
+  <td><span class="activity-name" onclick="${e.isReminder?`openReminder(${e.id})`:`openOneOff(${e.id})`}">${esc(e.name)}</span></td>
+  <td><span class="type-label">${esc(e.category||'Rotina')}</span></td>
+  <td>${fmt(e.date)}</td>
+  <td>${esc(e.time||'—')}${e.end?' – '+esc(e.end):''}</td>
+  <td>${Number(e.duration||0).toLocaleString('pt-BR')}h</td>
+  <td><div class="actions"><button class="secondary small" onclick="${e.isReminder?`openReminder(${e.id})`:`openOneOff(${e.id})`}">Editar</button><button class="danger small" onclick="deleteOneOff(${e.id})">Excluir</button><label style="display:flex;align-items:center;gap:5px;margin:0 0 0 auto;white-space:nowrap"><input type="checkbox" style="width:auto" onchange="toggleOneOff(${e.id},this.checked)"> Concluída</label></div></td>
+ </tr>`).join('');
+ const table=(headers,rows,empty)=>rows?`<div class="table-wrap"><table class="data-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty">${empty}</div>`;
+ el.innerHTML=`
+  <section class="calendar-group">
+   <div class="row" style="margin-bottom:12px"><h3>Atividades fixas</h3><span class="tag">${fixed.length} cadastradas</span></div>
+   ${table(['Atividade','Tipo','Repetição','Horário','Duração','Ações'],fixedRows,'Nenhuma atividade fixa cadastrada.')}
+  </section>
+  <section class="calendar-group" style="margin-top:24px">
+   <div class="row" style="margin-bottom:12px"><h3>Atividades pontuais</h3><span class="tag">${oneOffs.length} pendentes</span></div>
+   ${table(['Atividade','Tipo','Data','Horário','Duração','Ações'],oneRows,'Nenhuma atividade pontual pendente.')}
+  </section>`;
+}
+function deleteFixed(id){if(!confirm('Excluir esta atividade fixa?'))return;db.fixed=db.fixed.filter(x=>x.id!==id);save()}
+function openProject(id=null){
+ let p=db.projects.find(x=>x.id===id)||{};
+ const categories=[...new Set([...(db.projectCategories||[]),...db.projects.map(x=>x.category).filter(Boolean)])].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+ modal(id?'Editar projeto':'Novo projeto',`<div class="formgrid">
+ <div class="wide"><label>Nome do projeto</label><input name="name" required value="${esc(p.name||'')}" placeholder="Resultado que exige mais de uma ação"></div>
+ <div class="wide"><label>Resultado esperado</label><textarea name="outcome" rows="3" placeholder="O que precisa estar concluído para considerar este projeto finalizado?">${esc(p.outcome||'')}</textarea></div>
+ <div><label>Categoria</label><select name="category" id="projectCategorySelect"><option value="">Selecione uma categoria</option>${categories.map(c=>`<option value="${esc(c)}" ${p.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+ <div style="display:flex;align-items:end"><button type="button" class="secondary" onclick="manageProjectCategories()">＋ Adicionar / editar opções</button></div>
+ <div><label>Prazo previsto</label><input name="due" type="date" value="${p.due||''}"></div>
+ <div><label>Status</label><select name="status">${[['active','Em andamento'],['attention','Em atenção'],['paused','Pausado'],['done','Concluído']].map(([v,l])=>`<option value="${v}" ${(p.status||'active')===v?'selected':''}>${l}</option>`).join('')}</select></div>
+ <div><label>Prioridade</label><select name="priority">${['Alta','Média','Baixa'].map(c=>`<option ${p.priority===c?'selected':''}>${c}</option>`).join('')}</select></div>
+ <div><label>Progresso (%)</label><input name="progress" type="number" min="0" max="100" value="${p.progress||0}"></div>
+ <div class="wide"><label>Próxima entrega / marco</label><input name="milestone" value="${esc(p.milestone||'')}" placeholder="Próximo resultado intermediário"></div>
+ <div class="wide"><label>Riscos / pontos de atenção</label><textarea name="risk" rows="2">${esc(p.risk||'')}</textarea></div>
+ </div>`,fd=>{
+ const obj={...p,id:id||Date.now(),name:fd.get('name'),outcome:fd.get('outcome'),category:fd.get('category'),due:fd.get('due'),status:fd.get('status'),priority:fd.get('priority'),progress:Number(fd.get('progress')||0),milestone:fd.get('milestone'),risk:fd.get('risk'),notesLog:Array.isArray(p.notesLog)?p.notesLog:[]};
+ if(id)db.projects=db.projects.map(x=>x.id===id?obj:x);else db.projects.push(obj);save();
+ });
+}
+function manageProjectCategories(){
+ const current=[...new Set([...(db.projectCategories||[]),...db.projects.map(x=>x.category).filter(Boolean)])].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+ const answer=prompt('Edite a lista de categorias. Digite uma categoria por linha:',current.join('\\n'));
+ if(answer===null)return;
+ const values=[...new Set(answer.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean))];
+ db.projectCategories=values;
+ const select=document.getElementById('projectCategorySelect');
+ if(select){const selected=select.value;select.innerHTML='<option value="">Selecione uma categoria</option>'+values.sort((a,b)=>a.localeCompare(b,'pt-BR')).map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');select.value=values.includes(selected)?selected:'';}
+}
+function editProject(id){openProject(id)}
+function deleteProject(id){if(!confirm('Excluir projeto? As ações vinculadas serão mantidas, mas ficarão sem projeto.'))return;db.projects=db.projects.filter(p=>p.id!==id);db.tasks.forEach(t=>{if(t.project===id)t.project=null});save()}
+function exportBackup(){let b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='work-gtd-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function importBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.tasks)||!Array.isArray(x.projects))throw Error();db={...empty,...x,fixed:Array.isArray(x.fixed)?x.fixed:[]};save();alert('Backup importado.')}catch(err){alert('Arquivo de backup inválido.')}};r.readAsText(f);e.target.value=''}
+document.getElementById('dayDate').value=today();document.getElementById('reviewDate').value=today();document.getElementById('agendaDate').value=today();if(!Array.isArray(db.agendaEntries))db.agendaEntries=[];
+if(db.agendaEntries.length===0&&Array.isArray(db.meetings)&&db.meetings.length){
+ db.agendaEntries=db.meetings.map(m=>({id:m.id||Date.now()+Math.random(),title:m.title||'Registro importado',date:m.date||today(),time:m.time||'',projectId:m.projectId||'',projectName:m.projectName||'',notes:[m.participants?'Participantes: '+m.participants:'',m.agenda?'Pauta: '+m.agenda:'',m.decisions?'Decisões: '+m.decisions:'',m.actions?'Encaminhamentos: '+m.actions:'',m.notes||''].filter(Boolean).join('\\n\\n')}));
+}
+ensureQueueDates();
+renderAll();
+</script>
+</body>
+</html>
