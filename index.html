@@ -512,7 +512,7 @@ function renderDay(){
  }).join('');
  const hours=v=>Number(v||0)||0;
  const taskPlanned=tasks.reduce((a,t)=>a+hours(t.plannedHours),0),calendarPlanned=calendarItems.reduce((a,t)=>a+hours(t.duration),0);
- const taskActual=tasks.reduce((a,t)=>a+hours(t.actualHours),0),calendarActual=calendarItems.reduce((a,t)=>a+hours(t.kind==='fixed'?(db.fixed.find(x=>String(x.id)===String(t.id))?.actualHoursByDate?.[d]):t.actualHours),0);
+ const taskActual=tasks.reduce((a,t)=>a+hours(t.actualHoursByDate? t.actualHoursByDate[d]:t.actualHours),0),calendarActual=calendarItems.reduce((a,t)=>a+hours(t.kind==='fixed'?(db.fixed.find(x=>String(x.id)===String(t.id))?.actualHoursByDate?.[d]):t.actualHours),0);
  document.getElementById('plannedTotal').textContent=(taskPlanned+calendarPlanned).toLocaleString('pt-BR')+'h';
  document.getElementById('actualTotal').textContent=(taskActual+calendarActual).toLocaleString('pt-BR')+'h';
  document.getElementById('completedTotal').textContent=tasks.filter(t=>t.status==='done'||t.completed).length;
