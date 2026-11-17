@@ -315,7 +315,7 @@ html body span.category-label-neutral {
 </head>
 <body>
 <header>
- <div class="brand"><div class="logo" aria-label="PMO Atividades"><svg viewBox="0 0 64 64" width="27" height="27" role="img" aria-hidden="true"><rect x="7" y="11" width="50" height="46" rx="10" fill="#294b6b"/><path d="M20 6v12M44 6v12" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M7 25h50" stroke="#8bbce8" stroke-width="4"/><path d="m19 39 8 8 18-18" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Controle Atividades PMO</h1></div></div>
+ <div class="brand"><div class="logo" aria-label="PMO Atividades"><svg viewBox="0 0 64 64" width="27" height="27" role="img" aria-hidden="true"><rect x="7" y="11" width="50" height="46" rx="10" fill="#294b6b"/><path d="M20 6v12M44 6v12" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M7 25h50" stroke="#8bbce8" stroke-width="4"/><path d="m19 39 8 8 18-18" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>Controle Atividades PMO <span style="font-size:10px;color:var(--muted);font-weight:600">V35</span></h1></div></div>
  <div class="actions"><button class="ghost small" onclick="refreshApp()" title="Recarregar o aplicativo sem apagar as atividades">↻ Atualizar</button><button class="ghost small" onclick="exportBackup()">Exportar backup</button><button class="ghost small" onclick="document.getElementById('importer').click()">Importar</button><input id="importer" type="file" accept="application/json" hidden onchange="importBackup(event)"></div>
 </header>
 <nav id="nav">
@@ -327,7 +327,7 @@ html body span.category-label-neutral {
  <div class="grid stats" style="margin-top:0"><div class="card"><div class="stat-label">Horas planejadas</div><div class="stat-value" id="plannedTotal">0h</div></div><div class="card"><div class="stat-label">Horas realizadas</div><div class="stat-value" id="actualTotal">0h</div></div><div class="card"><div class="stat-label">Ações concluídas</div><div class="stat-value" id="completedTotal">0</div></div><div class="card"><div class="stat-label">Compromissos no calendário</div><div class="stat-value" id="fixedTotal">0</div></div></div>
  <div class="card day-calendar-card"><div class="row"><div><h3 id="dayHeading">Compromissos do Calendário</h3><div class="meta">Atividades fixas e pontuais cadastradas na aba Calendário</div></div><span class="tag">Por horário</span></div><div id="dayCalendarList"></div></div>
  <div class="card" id="dayWaitingCard" style="margin-top:-8px;margin-bottom:22px"><div class="row"><div><h3>Retornos esperados para hoje</h3><div class="meta">Atividades em Aguardando com data esperada de resposta igual à data selecionada</div></div><span class="tag" id="dayWaitingCount">0 retornos</span></div><div id="dayWaitingList"></div></div>
- <div class="day-kanban-head"><div><h3>Ações do dia</h3><p class="sub">Organize suas ações não agendadas. Arraste os cartões entre as etapas ou use os controles.</p></div><button class="secondary small" onclick="openTask()">＋ Adicionar ação</button></div>
+ <div class="day-kanban-head"><div><h3>Ações do dia</h3><p class="sub">Organize suas ações não agendadas. Somente atividades com status Fila Meu Dia aparecem aqui. Arraste os cartões entre as etapas ou use os controles.</p></div><button class="secondary small" onclick="openTask()">＋ Adicionar ação</button></div>
  <div id="dayKanban" class="day-kanban"></div>
 </section>
 <section class="view" id="calendar">
@@ -335,7 +335,7 @@ html body span.category-label-neutral {
  <div class="card"><div id="fixedList"></div></div>
 </section>
 <section class="view" id="next">
- <div class="headrow"><div><h2>Próximas ações</h2><p class="sub">Ações físicas, específicas e disponíveis para executar agora.</p></div><button onclick="openTask()">＋ Nova ação</button></div>
+ <div class="headrow"><div><h2>Próximas ações</h2><p class="sub">Ações disponíveis para planejamento. Altere o status para Fila Meu Dia quando quiser incluí-las na sua programação diária.</p></div><button onclick="openTask()">＋ Nova ação</button></div>
  <div class="filters"><input id="nextSearch" placeholder="Buscar ação..." oninput="renderNext()"><select id="nextProject" onchange="renderNext()"><option value="">Todos os projetos</option></select></div>
  <div class="card"><div id="nextList"></div></div>
 </section>
@@ -382,7 +382,7 @@ function fmt(d){return d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR'):'Se
 function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===v));}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.view));
 function projectName(id){return db.projects.find(p=>p.id===Number(id))?.name||''}
-function statusLabel(s){return ({processing:'Processamento',day:'Meu Dia',next:'Próximas ações',waiting:'Aguardando',backlog:'Backlog',done:'Concluída'})[s]||s}
+function statusLabel(s){return ({processing:'Processamento',dayQueue:'Fila Meu Dia',day:'Em execução',next:'Próximas ações',waiting:'Aguardando',backlog:'Backlog',done:'Concluída'})[s]||s}
 function categoryTag(category){const c=category||'';return `<span class=\"category-label-neutral\">${esc(c||'Sem categoria')}</span>`}
 function taskCard(t,opts={}){
  const dates=(t.startDate||t.endDate||t.date)?`${fmt(t.startDate||t.endDate||t.date)}${t.endDate&&t.endDate!==(t.startDate||t.date)?' a '+fmt(t.endDate):''}`:'Sem período definido';
@@ -502,13 +502,13 @@ function renderDay(){
  const waitingToday=db.tasks.filter(t=>t.status==='waiting'&&t.expectedResponseDate===d).sort((a,b)=>(a.waitingFor||'').localeCompare(b.waitingFor||'','pt-BR'));
  document.getElementById('dayWaitingCount').textContent=waitingToday.length+' retorno'+(waitingToday.length===1?'':'s');
  document.getElementById('dayWaitingList').innerHTML=waitingToday.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Aguardando de</th><th>Projeto</th><th>Ações</th></tr></thead><tbody>${waitingToday.map(t=>`<tr><td><strong>${esc(t.title)}</strong></td><td>${esc(t.waitingFor||'Não informado')}</td><td>${esc(projectName(t.project)||'—')}</td><td><button class="secondary small" onclick="editTask(${t.id})">Abrir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum retorno previsto para esta data.</div>';
- const taskStatuses=[['next','Fila'],['day','Em execução'],['done','Concluída']];
- const tasks=db.tasks.filter(t=>['next','day'].includes(t.status)||(t.status==='done'&&((t.completedAt||t.endDate||'')===d)));
+ const taskStatuses=[['dayQueue','Fila Meu Dia'],['day','Em execução'],['done','Concluída']];
+ const tasks=db.tasks.filter(t=>['dayQueue','day'].includes(t.status)||(t.status==='done'&&((t.completedAt||t.endDate||'')===d)));
  const kanban=document.getElementById('dayKanban');
  kanban.innerHTML=taskStatuses.map(([status,label])=>{
   const list=tasks.filter(t=>t.status===status).sort((a,b)=>{const rank={Alta:0,Normal:1,Baixa:2};return (rank[a.priority]??1)-(rank[b.priority]??1)||(b.createdAt||b.id||0)-(a.createdAt||a.id||0)});
-  const cards=list.map(t=>{const statusCardClass=status==='next'?'kanban-status-next':status==='day'?'kanban-status-day':'kanban-status-done';return `<article class="kanban-card ${statusCardClass}" draggable="true" ondragstart="kanbanDragStart(event,${t.id})" onclick="" ><div class="row"><div class="kanban-card-title" onclick="editTask(${t.id})">${esc(t.title)}</div><span class="priority-text priority-${t.priority==='Alta'?'high':t.priority==='Baixa'?'low':'normal'}" title="Prioridade ${t.priority||'Normal'}">${esc(t.priority||'Normal')}</span></div><div style="margin-top:7px">${categoryTag(t.category)}</div><div class="kanban-card-meta">${t.project?esc(projectName(t.project))+' · ':''}${Number(t.plannedHours||0).toLocaleString('pt-BR')}h planejadas · ${Number(t.actualHours||0).toLocaleString('pt-BR')}h realizadas</div><div class="kanban-card-meta"><strong>Início:</strong> ${t.executionStartedAt?fmt(t.executionStartedAt):'—'} · <strong>Conclusão:</strong> ${t.completedAt?fmt(t.completedAt):'Em aberto'}</div><div class="kanban-card-meta"><strong>Lead time:</strong> ${(()=>{const n=leadTimeDays(t.executionStartedAt,t.completedAt||today());return (n??0)+' dia'+((n??0)===1?'':'s')})()}</div>${t.notes?`<div class="kanban-card-meta">${esc(t.notes)}</div>`:''}<div class="kanban-card-actions"><button class="ghost small" onclick="event.stopPropagation();editTask(${t.id})">✎ Editar</button>${status!=='next'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'next')">← Fila</button>`:''}${status!=='day'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'day')">▶ Em execução</button>`:''}${status!=='done'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'done')">✓ Concluir</button>`:''}</div></article>`}).join('');
-  return `<section class="kanban-column" data-kanban-status="${status}" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event,'${status}')"><div class="kanban-column-head"><span class="kanban-stage-tag kanban-stage-${status}">${label}</span><span class="kanban-count">${list.length}${status==='next'?'/5':status==='day'?'/2':''}</span></div><div class="kanban-stack">${cards||'<div class="kanban-empty">Solte uma ação aqui</div>'}</div></section>`;
+  const cards=list.map(t=>{const statusCardClass=status==='dayQueue'?'kanban-status-next':status==='day'?'kanban-status-day':'kanban-status-done';return `<article class="kanban-card ${statusCardClass}" draggable="true" ondragstart="kanbanDragStart(event,${t.id})" onclick="" ><div class="row"><div class="kanban-card-title" onclick="editTask(${t.id})">${esc(t.title)}</div><span class="priority-text priority-${t.priority==='Alta'?'high':t.priority==='Baixa'?'low':'normal'}" title="Prioridade ${t.priority||'Normal'}">${esc(t.priority||'Normal')}</span></div><div style="margin-top:7px">${categoryTag(t.category)}</div><div class="kanban-card-meta">${t.project?esc(projectName(t.project))+' · ':''}${Number(t.plannedHours||0).toLocaleString('pt-BR')}h planejadas · ${Number(t.actualHours||0).toLocaleString('pt-BR')}h realizadas</div><div class="kanban-card-meta"><strong>Início:</strong> ${t.executionStartedAt?fmt(t.executionStartedAt):'—'} · <strong>Conclusão:</strong> ${t.completedAt?fmt(t.completedAt):'Em aberto'}</div><div class="kanban-card-meta"><strong>Lead time:</strong> ${(()=>{const n=leadTimeDays(t.executionStartedAt,t.completedAt||today());return (n??0)+' dia'+((n??0)===1?'':'s')})()}</div>${t.notes?`<div class="kanban-card-meta">${esc(t.notes)}</div>`:''}<div class="kanban-card-actions"><button class="ghost small" onclick="event.stopPropagation();editTask(${t.id})">✎ Editar</button>${status!=='dayQueue'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'next')">← Próximas ações</button>`:''}${status!=='day'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'day')">▶ Em execução</button>`:''}${status!=='done'?`<button class="secondary small" onclick="event.stopPropagation();moveKanbanTask(${t.id},'done')">✓ Concluir</button>`:''}</div></article>`}).join('');
+  return `<section class="kanban-column" data-kanban-status="${status}" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event,'${status}')"><div class="kanban-column-head"><span class="kanban-stage-tag kanban-stage-${status}">${label}</span><span class="kanban-count">${list.length}${status==='dayQueue'?'/5':status==='day'?'/2':''}</span></div><div class="kanban-stack">${cards||'<div class="kanban-empty">Solte uma ação aqui</div>'}</div></section>`;
  }).join('');
  const hours=v=>Number(v||0)||0;
  const taskPlanned=tasks.reduce((a,t)=>a+hours(t.plannedHours),0),calendarPlanned=calendarItems.reduce((a,t)=>a+hours(t.duration),0);
@@ -523,18 +523,18 @@ function kanbanDragStart(event,id){kanbanDraggedTask=String(id);event.dataTransf
 function kanbanDragOver(event){event.preventDefault();event.currentTarget.classList.add('drag-over');event.dataTransfer.dropEffect='move'}
 function kanbanDragLeave(event){if(!event.currentTarget.contains(event.relatedTarget))event.currentTarget.classList.remove('drag-over')}
 function kanbanDrop(event,status){event.preventDefault();event.currentTarget.classList.remove('drag-over');const id=event.dataTransfer.getData('text/plain')||kanbanDraggedTask;kanbanDraggedTask=null;if(id)moveKanbanTask(id,status)}
-function kanbanWipLimit(status){return status==='next'?5:status==='day'?2:Infinity}
+function kanbanWipLimit(status){return status==='dayQueue'?5:status==='day'?2:Infinity}
 function canEnterKanbanStatus(task,status){
- if(!['next','day'].includes(status)||task.status===status)return true;
+ if(!['dayQueue','day'].includes(status)||task.status===status)return true;
  const limit=kanbanWipLimit(status),count=db.tasks.filter(x=>x.status===status&&String(x.id)!==String(task.id)).length;
- if(count>=limit){const label=status==='next'?'Fila':'Em execução';alert(`Limite WIP atingido: ${label} aceita no máximo ${limit} cards. Conclua ou mova um card antes de adicionar outro.`);return false;}
+ if(count>=limit){const label=status==='dayQueue'?'Fila Meu Dia':'Em execução';alert(`Limite WIP atingido: ${label} aceita no máximo ${limit} cards. Conclua ou mova um card antes de adicionar outro.`);return false;}
  return true;
 }
 function moveKanbanTask(id,status){
- const t=db.tasks.find(x=>String(x.id)===String(id));if(!t||!['next','day','done'].includes(status))return;
+ const t=db.tasks.find(x=>String(x.id)===String(id));if(!t||!['next','dayQueue','day','done'].includes(status))return;
  if(!canEnterKanbanStatus(t,status))return;
  const previous=t.status;
- if(status==='next'&&!t.queueEnteredAt)t.queueEnteredAt=today();
+ if(['next','dayQueue'].includes(status)&&!t.queueEnteredAt)t.queueEnteredAt=today();
  if(status==='day'&&!t.executionStartedAt){t.executionStartedAt=today();t.startDate=t.executionStartedAt;}
  if(status==='done'){
   if(!t.executionStartedAt){t.executionStartedAt=today();t.startDate=t.executionStartedAt;}
@@ -588,6 +588,8 @@ function moveAgendaEntry(kind,id,date,newTime){
 function updateNextStatus(id,status){
  let t=db.tasks.find(x=>x.id===id);if(!t)return;
  if(!canEnterKanbanStatus(t,status))return;
+ if(status==='day'&&!t.executionStartedAt){t.executionStartedAt=today();t.startDate=today();}
+ if(status==='done'){t.completed=true;t.completedAt=t.completedAt||today();t.endDate=t.completedAt;}else{t.completed=false;t.completedAt='';t.endDate='';}
  t.status=status;save();
 }
 function updateNextField(id,field,value){
@@ -599,9 +601,9 @@ function updateNextField(id,field,value){
 function renderNext(){
  let q=(document.getElementById('nextSearch')?.value||'').toLowerCase(),pr=document.getElementById('nextProject')?.value||'';
  let ps=document.getElementById('nextProject');if(ps){let val=ps.value;ps.innerHTML='<option value="">Todos os projetos</option>'+db.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');ps.value=val}
- let ts=db.tasks.filter(t=>t.status==='next'&&t.title.toLowerCase().includes(q)&&(!pr||String(t.project)===pr)).sort((a,b)=>(a.startDate||a.date||'9999').localeCompare(b.startDate||b.date||'9999'));
- const statusOptions=[['processing','Processamento'],['next','Próximas ações'],['day','Meu Dia'],['waiting','Aguardando'],['done','Concluída']];
- document.getElementById('nextList').innerHTML=ts.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Prioridade</th><th>Horas planejadas</th><th>Projeto</th><th>Status</th><th>Abrir</th></tr></thead><tbody>${ts.map(t=>`<tr><td><span class="activity-name" onclick="editTask(${t.id})" title="Clique para abrir a atividade">${esc(t.title)}</span></td><td><select aria-label="Prioridade de ${esc(t.title)}" onchange="updateNextField(${t.id},'priority',this.value)"><option value="Alta" ${t.priority==='Alta'?'selected':''}>🔴 Alta</option><option value="Normal" ${(!t.priority||t.priority==='Normal')?'selected':''}>🟡 Normal</option><option value="Baixa" ${t.priority==='Baixa'?'selected':''}>🔵 Baixa</option></select></td><td><input class="next-hours" aria-label="Horas planejadas de ${esc(t.title)}" type="number" min="0" step="0.25" value="${Number(t.plannedHours||0)}" onchange="updateNextField(${t.id},'plannedHours',this.value)"></td><td>${esc(projectName(t.project)||'—')}</td><td><select aria-label="Status de ${esc(t.title)}" onchange="updateNextStatus(${t.id},this.value)">${statusOptions.map(([v,l])=>`<option value="${v}" ${t.status===v?'selected':''}>${l}</option>`).join('')}</select></td><td><button class="secondary small" onclick="editTask(${t.id})" title="Abrir detalhes da atividade">Abrir ↗</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhuma próxima ação encontrada. Mova uma atividade do backlog para Próximas ações.</div>';
+ let ts=db.tasks.filter(t=>['next','dayQueue'].includes(t.status)&&t.title.toLowerCase().includes(q)&&(!pr||String(t.project)===pr)).sort((a,b)=>(a.startDate||a.date||'9999').localeCompare(b.startDate||b.date||'9999'));
+ const statusOptions=[['next','Próximas ações'],['dayQueue','Fila Meu Dia'],['day','Em execução'],['waiting','Aguardando'],['done','Concluída']];
+ document.getElementById('nextList').innerHTML=ts.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Prioridade</th><th>Horas planejadas</th><th>Projeto</th><th>Status</th><th>Abrir</th></tr></thead><tbody>${ts.map(t=>`<tr><td><span class="activity-name" onclick="editTask(${t.id})" title="Clique para abrir a atividade">${esc(t.title)}</span></td><td><select aria-label="Prioridade de ${esc(t.title)}" onchange="updateNextField(${t.id},'priority',this.value)"><option value="Alta" ${t.priority==='Alta'?'selected':''}>🔴 Alta</option><option value="Normal" ${(!t.priority||t.priority==='Normal')?'selected':''}>🟡 Normal</option><option value="Baixa" ${t.priority==='Baixa'?'selected':''}>🔵 Baixa</option></select></td><td><input class="next-hours" aria-label="Horas planejadas de ${esc(t.title)}" type="number" min="0" step="0.25" value="${Number(t.plannedHours||0)}" onchange="updateNextField(${t.id},'plannedHours',this.value)"></td><td>${esc(projectName(t.project)||'—')}</td><td><select aria-label="Status de ${esc(t.title)}" onchange="updateNextStatus(${t.id},this.value)">${statusOptions.map(([v,l])=>`<option value="${v}" ${t.status===v?'selected':''}>${l}</option>`).join('')}</select></td><td><button class="secondary small" onclick="editTask(${t.id})" title="Abrir detalhes da atividade">Abrir ↗</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhuma atividade encontrada em Próximas ações ou na Fila Meu Dia.</div>';
 }
 function renderMeetings(){
  const q=(document.getElementById('processingSearch')?.value||'').toLowerCase();
@@ -794,7 +796,7 @@ function openTask(id=null,status='next',projectId=null,seed=null){
  let t=db.tasks.find(x=>x.id===id)||seed||{},currentStatus=t.status||status,pid=t.project||projectId||'';
  modal(id?'Editar atividade':'Nova atividade',`<div class="formgrid">
  <div class="wide"><label>Atividade</label><input name="title" required autofocus value="${esc(t.title||'')}"></div>
- <div><label>Status GTD</label><select name="status">${[['next','Próximas ações'],['day','Meu Dia'],['waiting','Aguardando'],['done','Concluída']].map(([v,l])=>`<option value="${v}" ${currentStatus===v?'selected':''}>${l}</option>`).join('')}</select></div>
+ <div><label>Status GTD</label><select name="status">${[['next','Próximas ações'],['dayQueue','Fila Meu Dia'],['day','Em execução'],['waiting','Aguardando'],['done','Concluída']].map(([v,l])=>`<option value="${v}" ${currentStatus===v?'selected':''}>${l}</option>`).join('')}</select></div>
  <div><label>Projeto relacionado</label><select name="project"><option value="">Sem projeto</option>${db.projects.map(p=>`<option value="${p.id}" ${String(pid)===String(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
  <div><label>Categoria</label><select name="category"><option value="">Selecione</option>${['PMO','Comitê de Produto','BackOffice'].map(c=>`<option value="${c}" ${(t.category||'')===c?'selected':''}>${c}</option>`).join('')}</select></div>
  <div><label>Data de início</label><input name="startDate" type="date" value="${t.startDate||t.date||''}"></div>
@@ -808,7 +810,7 @@ function openTask(id=null,status='next',projectId=null,seed=null){
   const capacityTask={...t,id:id||'__new__'};
   if(!canEnterKanbanStatus(capacityTask,selectedStatus))return;
   let queueEnteredAt=t.queueEnteredAt||'';
-  if(['next','day','done'].includes(selectedStatus)&&!queueEnteredAt)queueEnteredAt=isoDateFromTimestamp(t.createdAt)||today();
+  if(['next','dayQueue','day','done'].includes(selectedStatus)&&!queueEnteredAt)queueEnteredAt=isoDateFromTimestamp(t.createdAt)||today();
   let startDate=fd.get('startDate')||'';
   let executionStartedAt=startDate;
   if(['day','done'].includes(selectedStatus)&&!executionStartedAt)executionStartedAt=today();
