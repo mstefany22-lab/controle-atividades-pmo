@@ -727,7 +727,7 @@ function weekBounds(dateStr){let d=new Date((dateStr||today())+'T12:00:00'),day=
 function renderReview(){
  const input=document.getElementById('reviewDate');if(!input)return;
  const {start,end}=weekBounds(input.value||today());
- document.getElementById('weekHeading').textContent=\`Atividades executadas · \${fmt(start)} a \${fmt(end)}\`;
+ document.getElementById('weekHeading').textContent=`Atividades executadas · ${fmt(start)} a ${fmt(end)}`;
  const inWeek=d=>!!d&&d>=start&&d<=end;
  const taskRows=db.tasks
   .filter(t=>(t.completed||t.status==='done')&&inWeek(t.completedAt||t.endDate||t.startDate||t.date))
@@ -752,7 +752,7 @@ function renderReview(){
  document.getElementById('weekActual').textContent=actual.toLocaleString('pt-BR')+'h';
  document.getElementById('weekDelta').textContent=(rows.length?planned/rows.length:0).toFixed(2).replace('.',',')+'h';
  document.getElementById('weekVariance').textContent=signed(variance)+'h'+(variancePct===null?'':' ('+signed(variancePct)+'%)');
- document.getElementById('reviewList').innerHTML=rows.length?\`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Projeto</th><th>Data de conclusão</th><th>Horas planejadas</th><th>Horas realizadas</th><th>Desvio</th><th>Ações</th></tr></thead><tbody>\${rows.map(r=>{const diff=r.actual-r.planned,pct=r.planned>0?(diff/r.planned)*100:null;return \`<tr><td><strong>\${esc(r.title||'')}</strong><span class="tag" style="margin-left:6px">\${r.kind==='fixed'?'Fixa':r.kind==='oneoff'?'Calendário':'Tarefa'}</span></td><td>\${esc(projectName(r.project)||'—')}</td><td>\${fmt(r.date)}</td><td>\${r.planned.toLocaleString('pt-BR')}h</td><td>\${r.actual.toLocaleString('pt-BR')}h</td><td><strong>\${signed(diff)}h</strong>\${pct===null?'':' <span class="meta">('+signed(pct)+'%)</span>'}</td><td><button class="secondary small" onclick="\${r.kind==='task'?\`editTask(\${r.id})\`:r.kind==='fixed'?\`openFixed(\${r.id})\`:\`openOneOff(\${r.id})\`}">Abrir</button></td></tr>\`;}).join('')}</tbody></table></div>':'<div class="empty">Nenhuma atividade concluída nesta semana.</div>';
+ document.getElementById('reviewList').innerHTML=rows.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>Atividade</th><th>Projeto</th><th>Data de conclusão</th><th>Horas planejadas</th><th>Horas realizadas</th><th>Desvio</th><th>Ações</th></tr></thead><tbody>${rows.map(r=>{const diff=r.actual-r.planned,pct=r.planned>0?(diff/r.planned)*100:null;return `<tr><td><strong>${esc(r.title||'')}</strong><span class="tag" style="margin-left:6px">${r.kind==='fixed'?'Fixa':r.kind==='oneoff'?'Calendário':'Tarefa'}</span></td><td>${esc(projectName(r.project)||'—')}</td><td>${fmt(r.date)}</td><td>${r.planned.toLocaleString('pt-BR')}h</td><td>${r.actual.toLocaleString('pt-BR')}h</td><td><strong>${signed(diff)}h</strong>${pct===null?'':' <span class="meta">('+signed(pct)+'%)</span>'}</td><td><button class="secondary small" onclick="${r.kind==='task'?`editTask(${r.id})`:r.kind==='fixed'?`openFixed(${r.id})`:`openOneOff(${r.id})`}">Abrir</button></td></tr>`;}).join('')}</tbody></table></div>':'<div class="empty">Nenhuma atividade concluída nesta semana.</div>';
 }
 function renderWaiting(){
  const el=document.getElementById('waitingList'),todayDate=today();
