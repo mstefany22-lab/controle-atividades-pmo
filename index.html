@@ -511,7 +511,7 @@ function renderDay(){
   return `<section class="kanban-column" data-kanban-status="${status}" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event,'${status}')"><div class="kanban-column-head"><span class="kanban-stage-tag kanban-stage-${status}">${label}</span><span class="kanban-count">${list.length}${status==='dayQueue'?'/5':status==='day'?'/2':''}</span></div><div class="kanban-stack">${cards||'<div class="kanban-empty">Solte uma ação aqui</div>'}</div></section>`;
  }).join('');
  const hours=v=>Number(v||0)||0;
- const taskActual=tasks.reduce((a,t)=>a+hours(t.actualHoursByDate? t.actualHoursByDate[d]:t.actualHours),0),calendarActual=calendarItems.reduce((a,t)=>a+hours(t.kind==='fixed'?(db.fixed.find(x=>String(x.id)===String(t.id))?.actualHoursByDate?.[d]):t.actualHours),0);
+ const taskActual=tasks.reduce((a,t)=>a+hours(t.actualHoursByDate?.[d]||0),0),calendarActual=calendarItems.reduce((a,t)=>a+hours(t.kind==='fixed'?(db.fixed.find(x=>String(x.id)===String(t.id))?.actualHoursByDate?.[d]):t.actualHours),0);
  document.getElementById('actualTotal').textContent=(taskActual+calendarActual).toLocaleString('pt-BR')+'h';
  document.getElementById('completedTotal').textContent=tasks.filter(t=>t.status==='done'||t.completed).length;
  document.getElementById('fixedTotal').textContent=calendarItems.length;
