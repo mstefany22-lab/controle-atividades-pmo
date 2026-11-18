@@ -326,7 +326,7 @@ html body span.category-label-neutral {
  <div class="headrow"><div><h2>Meu dia</h2><p class="sub">Compromissos do Calendário por horário e ações organizadas em Kanban.</p></div><div class="actions"><input type="date" id="dayDate" style="width:auto" onchange="renderDay()"><button onclick="openTask()">＋ Nova ação</button></div></div>
  <div class="grid stats" style="margin-top:0"><div class="card"><div class="stat-label">Horas realizadas</div><div class="stat-value" id="actualTotal">0h</div></div><div class="card"><div class="stat-label">Ações concluídas</div><div class="stat-value" id="completedTotal">0</div></div><div class="card"><div class="stat-label">Compromissos</div><div class="stat-value" id="fixedTotal">0</div></div><div class="card"><div class="stat-label">Bloqueios</div><div class="stat-value" id="blockedTotal">0</div></div></div>
  <div class="card day-calendar-card"><div class="row"><div><h3 id="dayHeading">Compromissos do Calendário</h3><div class="meta">Atividades fixas e pontuais cadastradas na aba Calendário</div></div><span class="tag">Por horário</span></div><div id="dayCalendarList"></div></div>
- <div class="card" id="dayWaitingCard" style="margin-top:-8px;margin-bottom:22px"><div class="row"><div><h3>Atividades com bloqueios com data limite hoje</h3><div class="meta">Atividades em Aguardando cuja data limite corresponde à data selecionada</div></div><span class="tag" id="dayWaitingCount">0 bloqueios</span></div><div id="dayWaitingList"></div></div>
+ <div class="card" id="dayWaitingCard" style="margin-top:-8px;margin-bottom:22px"><div class="row"><div><h3>Atividade que devem ser desbloqueadas hoje</h3><div class="meta">Atividades em Aguardando cuja data limite corresponde à data selecionada</div></div><span class="tag" id="dayWaitingCount">0 bloqueios</span></div><div id="dayWaitingList"></div></div>
  <div class="day-kanban-head"><div><h3>Ações do dia</h3></div><button class="secondary small" onclick="openTask()">＋ Adicionar ação</button></div>
  <div id="dayKanban" class="day-kanban"></div>
 </section>
@@ -487,7 +487,7 @@ function ensureQueueDates(){
 function renderDay(){
  const d=document.getElementById('dayDate').value||today();
  const dateLabel=fmt(d);
- document.getElementById('dayHeading').textContent='Compromissos de '+dateLabel;
+ document.getElementById('dayHeading').textContent='Compromissos do dia';
  const fixed=fixedForDate(d).map(x=>({...x,kind:'fixed'}));
  const punctual=(db.oneOff||[]).filter(e=>e.date===d).map(e=>({...e,kind:'oneoff'}));
  const calendarItems=[...fixed,...punctual].sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
