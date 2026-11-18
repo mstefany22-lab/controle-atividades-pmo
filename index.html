@@ -324,7 +324,7 @@ html body span.category-label-neutral {
 <main>
 <section class="view active" id="day">
  <div class="headrow"><div><h2>Meu dia</h2><p class="sub">Compromissos do Calendário por horário e ações organizadas em Kanban.</p></div><div class="actions"><input type="date" id="dayDate" style="width:auto" onchange="renderDay()"><button onclick="openTask()">＋ Nova ação</button></div></div>
- <div class="grid stats" style="margin-top:0"><div class="card"><div class="stat-label">Horas planejadas</div><div class="stat-value" id="plannedTotal">0h</div></div><div class="card"><div class="stat-label">Horas realizadas</div><div class="stat-value" id="actualTotal">0h</div></div><div class="card"><div class="stat-label">Ações concluídas</div><div class="stat-value" id="completedTotal">0</div></div><div class="card"><div class="stat-label">Compromissos no calendário</div><div class="stat-value" id="fixedTotal">0</div></div></div>
+ <div class="grid stats" style="margin-top:0"><div class="card"><div class="stat-label">Horas na fila</div><div class="stat-value" id="plannedTotal">0h</div></div><div class="card"><div class="stat-label">Horas realizadas</div><div class="stat-value" id="actualTotal">0h</div></div><div class="card"><div class="stat-label">Ações concluídas</div><div class="stat-value" id="completedTotal">0</div></div><div class="card"><div class="stat-label">Compromissos no calendário</div><div class="stat-value" id="fixedTotal">0</div></div></div>
  <div class="card day-calendar-card"><div class="row"><div><h3 id="dayHeading">Compromissos do Calendário</h3><div class="meta">Atividades fixas e pontuais cadastradas na aba Calendário</div></div><span class="tag">Por horário</span></div><div id="dayCalendarList"></div></div>
  <div class="card" id="dayWaitingCard" style="margin-top:-8px;margin-bottom:22px"><div class="row"><div><h3>Retornos esperados para hoje</h3><div class="meta">Atividades em Aguardando com data esperada de resposta igual à data selecionada</div></div><span class="tag" id="dayWaitingCount">0 retornos</span></div><div id="dayWaitingList"></div></div>
  <div class="day-kanban-head"><div><h3>Ações do dia</h3><p class="sub">Organize suas ações não agendadas. Somente atividades com status Fila Meu Dia aparecem aqui. Arraste os cartões entre as etapas ou use os controles.</p></div><button class="secondary small" onclick="openTask()">＋ Adicionar ação</button></div>
@@ -511,9 +511,9 @@ function renderDay(){
   return `<section class="kanban-column" data-kanban-status="${status}" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event,'${status}')"><div class="kanban-column-head"><span class="kanban-stage-tag kanban-stage-${status}">${label}</span><span class="kanban-count">${list.length}${status==='dayQueue'?'/5':status==='day'?'/2':''}</span></div><div class="kanban-stack">${cards||'<div class="kanban-empty">Solte uma ação aqui</div>'}</div></section>`;
  }).join('');
  const hours=v=>Number(v||0)||0;
- const taskPlanned=tasks.reduce((a,t)=>a+hours(t.plannedHours),0),calendarPlanned=calendarItems.reduce((a,t)=>a+hours(t.duration),0);
+ const taskPlanned=tasks.filter(t=>t.status==='dayQueue').reduce((a,t)=>a+hours(t.plannedHours),0);
  const taskActual=tasks.reduce((a,t)=>a+hours(t.actualHoursByDate? t.actualHoursByDate[d]:t.actualHours),0),calendarActual=calendarItems.reduce((a,t)=>a+hours(t.kind==='fixed'?(db.fixed.find(x=>String(x.id)===String(t.id))?.actualHoursByDate?.[d]):t.actualHours),0);
- document.getElementById('plannedTotal').textContent=(taskPlanned+calendarPlanned).toLocaleString('pt-BR')+'h';
+ document.getElementById('plannedTotal').textContent=taskPlanned.toLocaleString('pt-BR')+'h';
  document.getElementById('actualTotal').textContent=(taskActual+calendarActual).toLocaleString('pt-BR')+'h';
  document.getElementById('completedTotal').textContent=tasks.filter(t=>t.status==='done'||t.completed).length;
  document.getElementById('fixedTotal').textContent=calendarItems.length;
